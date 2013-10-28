@@ -17,9 +17,6 @@ var $dragProvider = function() {
       },
 
       draggable: function(element, options) {
-        if (!angular.isElement(element)) {
-          throw "expected element";
-        }
         element = angular.element(element);
 
         var $draggable = element.data("$draggable");
