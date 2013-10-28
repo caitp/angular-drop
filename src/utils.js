@@ -90,34 +90,4 @@ DOM = {
   isWindow: function(obj) {
     return obj && obj.document && obj.location && obj.alert && obj.setInterval;
   },
-
-  eventConstructor: function(name, target) {
-    // mouse events
-    var event;
-    if (/^(click|contextmenu|dblclick|mousedown|mouseenter|mouseleave|mousemove|mouseout|mouseover|mouseup|show)$/
-    .test(name)) {
-      if (typeof MouseEvent === "function") {
-        event = new MouseEvent(name);
-      } else {
-        event = document.createEvent('MouseEvents');
-        event.initMouseEvent(name, true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
-      }
-      return event;
-    }
-
-    // focus events
-    if (/^(blur|focus)$/.test(name)) {
-      event = new FocusEvent(name);
-      return event;
-    }
-
-    // Default: custom events
-    return new CustomEvent(name);
-  },
-
-  trigger: function(name, element, memo, event) {
-    element = angular.element(element)[0];
-    event = event || DOM.eventConstructor(name, element);
-    element.dispatchEvent(event);
-  }
 };

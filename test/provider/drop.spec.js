@@ -45,9 +45,4 @@ describe('$drop', function() {
       expect(d1.children().last().prop('id')).toEqual('draggable');
     });
   });
-  /*it('should set $drag.current to the dragging element on mousedown', function() {
-    var instance = $drop.droppable(element);
-    DOM.trigger('mousedown', element);
-    expect($drag.current).toEqual(instance);
-  });*/
 });

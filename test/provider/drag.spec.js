@@ -33,7 +33,7 @@ describe('$drag', function() {
 
   it('should set $drag.current to the dragging element on mousedown', function() {
     var instance = $drag.draggable(element);
-    DOM.trigger('mousedown', element);
+    element.triggerHandler('mousedown');
     expect($drag.current).toEqual(instance);
   });
 });
