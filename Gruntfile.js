@@ -26,9 +26,12 @@ module.exports = function(grunt) {
   // global beforeEach
   util.init();
 
+  var pkg = grunt.file.readJSON('package.json');
 
   grunt.initConfig({
     DROP_VERSION: DROP_VERSION,
+
+    pkg: pkg,
 
     parallel: {
       travis: {
@@ -89,6 +92,30 @@ module.exports = function(grunt) {
     clean: {
       build: ['build'],
       tmp: ['tmp']
+    },
+
+    copy: {
+      demohtml: {
+        options: {
+          // process html files with gruntfile config
+          processContent: grunt.template.process
+        },
+        files: [{
+          expand: true,
+          src: ["**/*.html"],
+          cwd: "misc/demo/",
+          dest: "build/"
+        }]
+      },
+      demoassets: {
+        files: [{
+          expand: true,
+          // Don't re-copy html files, we process those
+          src: ["**/**/*", "!**/*.html"],
+          cwd: "misc/demo",
+          dest: "build/"
+        }]
+      }
     },
 
     jshint: {
@@ -152,7 +179,7 @@ module.exports = function(grunt) {
 
   grunt.registerTask('minify', ['bower','clean', 'build', 'minall']);
   grunt.registerTask('webserver', ['connect:devserver']);
-  grunt.registerTask('package', ['bower','clean', 'buildall', 'minall', 'collect-errors', 'write', 'compress']);
+  grunt.registerTask('package', ['bower','clean', 'buildall', 'minall', 'collect-errors', 'write', 'compress', 'copy']);
   grunt.registerTask('package-without-bower', ['clean', 'buildall', 'minall', 'collect-errors', 'write', 'compress']);
   grunt.registerTask('ci-checks', ['ddescribe-iit', 'merge-conflict', 'jshint']);
   grunt.registerTask('default', ['package']);
