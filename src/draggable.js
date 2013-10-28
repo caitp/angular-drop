@@ -50,8 +50,6 @@ var $dragProvider = function() {
       }
     };
 
-    function Draggable() {};
-
     Draggable.prototype = {
       constructor: Draggable,
 
@@ -67,6 +65,7 @@ var $dragProvider = function() {
 
         currentDrag = self;
 
+        self.cssDisplay = self.element.css('display');
         self.cssPosition = self.element.css("position");
 
         self.offset = self.positionAbs = DOM.offset(self.element);

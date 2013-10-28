@@ -70,7 +70,7 @@ var $dropProvider = function() {
         }
         var current = currentDrag, element, $droppable;
 
-        var origDisplay = current.element.css('display');
+        // Element must be hidden so that elementFromPoint can find the appropriate element.
         current.element.css({
           display: 'none'
         });
@@ -84,30 +84,42 @@ var $dropProvider = function() {
           element = element.parentNode;
         }
         element = angular.element(element);
-        $droppable = $drop.droppable(element, false);
+        $droppable = element.inheritedData('$droppable');
 
         if (!$droppable) {
           // Element is not droppable...
           return;
         }
 
-        element.append(current.element);
-        current.element.css({
-          display: origDisplay
-        });
-        current.finish();
+        $droppable.drop(current);
 
         return true;
       }
     };
 
-    function Droppable() {};
-
     Droppable.prototype = {
       constructor: Droppable,
 
-      // Begin dragging
-      drop: function(element) {
+      drop: function(draggable, options) {
+        draggable = draggable || currentDrag;
+        if (typeof draggable.length === 'number' || draggable.nodeName) {
+          // Looks like an element...
+          draggable = angular.element(draggable).data('$draggable');
+        }
+        if (!draggable || draggable.constructor !== Draggable) {
+          return;
+        }
+
+        options = angular.extend(options || {}, {
+          display: draggable.cssDisplay
+        });
+
+        this.element.append(draggable.element);
+
+        draggable.element.css({
+          display: options.display
+        });
+        draggable.finish();
       },
     };
 

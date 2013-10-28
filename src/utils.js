@@ -21,6 +21,9 @@ var _version = {
 
 currentDrag;
 
+function Draggable() {};
+function Droppable() {};
+
 var
 readonly = function(target, name, fn) {
   if (Object.defineProperty) {
@@ -88,23 +91,28 @@ DOM = {
     return obj && obj.document && obj.location && obj.alert && obj.setInterval;
   },
 
-  trigger: function(name, element, memo) {
+  eventConstructor: function(name, target) {
+    // mouse events
     var event;
-    if (document.createEvent) {
-      event = document.createEvent("HTMLEvents");
-      event.initEvent(name, true, true);
-    } else {
-      event = document.createEventObject();
-      event.eventType = name;
+    if (/^(click|contextmenu|dblclick|mousedown|mouseenter|mouseleave|mousemove|mouseout|mouseover|mouseup|show)$/
+    .test(name)) {
+      event = new MouseEvent(name);
+      return event;
     }
 
-    event.eventName = name;
-    event.memo = memo || {};
-
-    if (document.createEvent) {
-      element.dispatchEvent(event);
-    } else {
-      element.fireEvent("on" + event.eventType, event);
+    // focus events
+    if (/^(blur|focus)$/.test(name)) {
+      event = new FocusEvent(name);
+      return event;
     }
+
+    // Default: custom events
+    return new CustomEvent(name);
+  },
+
+  trigger: function(name, element, memo, event) {
+    element = angular.element(element)[0];
+    event = event || DOM.eventConstructor(name, element);
+    element.dispatchEvent(event);
   }
 };
