@@ -17,9 +17,6 @@ var $dropProvider = function() {
       },
 
       droppable: function(element, options) {
-        if (!angular.isElement(element)) {
-          throw "expected element";
-        }
         element = angular.element(element);
 
         var $droppable = element.data("$droppable");
