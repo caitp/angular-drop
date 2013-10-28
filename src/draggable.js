@@ -63,7 +63,9 @@ var $dragProvider = function() {
         currentDrag = self;
 
         self.cssDisplay = self.element.css('display');
-        self.cssPosition = self.element.css("position");
+        if (!self.hanging) {
+          self.cssPosition = self.element.css("position");
+        }
 
         self.offset = self.positionAbs = DOM.offset(self.element);
 
@@ -76,10 +78,15 @@ var $dragProvider = function() {
           },
         });
 
+        self.lastMouseY = event.pageY;
+        self.lastMouseX = event.pageX;
+
         self.startEvent = event;
-        self.originalPosition = self.element.css('position');
+
         self.element.css({
-          position: 'absolute'
+          position: 'absolute',
+          left: self.offset.left,
+          top: self.offset.top
         });
 
         $document.on("mousemove", self.drag);
@@ -108,8 +115,8 @@ var $dragProvider = function() {
         var style = self.element.prop('style');
 
         var position = {
-          top: event.clientY,
-          left: event.clientX
+          top: event.pageY,
+          left: event.pageX
         },
         x = style.left || 0, y = style.top || 0,  nx, ny;
 
