@@ -164,17 +164,6 @@ module.exports = function(grunt) {
       require('fs').chmodSync('.git/hooks/commit-msg', '0755');
     }
   });
-  
-  // Test
-  grunt.registerTask('test', 'Run tests on singleRun karma server', function() {
-    // This task can be executed in 3 different environments: local, Travis-CI, 
-    // and Jenkins-CI. We need to take settings for each one into account
-    if (process.env.TRAVIS) {
-      grunt.task.run('karma:travis');
-    } else {
-      grunt.task.run(this.args.length ? 'karma:jenkins' : 'karma:continuous');
-    }
-  });
 
   // Shell commands
   grunt.registerMultiTask('shell', 'Run shell commands', function() {
