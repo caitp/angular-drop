@@ -10,7 +10,7 @@ var droppableDirective = ['$drop', function($drop) {
 }];
 
 var $dropProvider = function() {
-  this.$get = ['$document', function($document) {
+  this.$get = ['$document', '$rootScope', function($document, $rootScope) {
     var $drop = {
       isDroppable: function(element) {
         return !!$drag.droppable(element);
@@ -74,7 +74,7 @@ var $dropProvider = function() {
 
         element = document.elementFromPoint(x, y);
         if (!element) {
-          return;
+          return badDrop();
         }
         if (element.nodeType === 3) {
           // Opera
@@ -85,12 +85,21 @@ var $dropProvider = function() {
 
         if (!$droppable) {
           // Element is not droppable...
-          return;
+          return badDrop();
         }
 
         $droppable.drop(current);
 
         return true;
+
+        function badDrop() {
+          current.hanging = true;
+          current.element.css({
+            display: current.cssDisplay
+          });
+          currentDrag = undefined;
+          $rootScope.$emit("$badDrop", current);
+        }
       }
     };
 
@@ -116,6 +125,10 @@ var $dropProvider = function() {
         draggable.element.css({
           display: options.display
         });
+        draggable.hanging = false;
+        if (!$rootScope.$$phase) {
+          $rootScope.$apply();
+        }
         draggable.finish();
       },
     };

@@ -1,14 +1,13 @@
 'use strict';
 
 var $dndProvider = function() {
-  this.$get = ['$drag', '$drop', function($drag, $drop) {
-    var currentDrag;
+  this.$get = [function() {
     var $dnd = {
       
     };
 
     // Special read-only properties
-    readonly($dnd, 'current', function() { return $drag.current; });
+    readonly($dnd, 'current', function() { return currentDrag; });
     readonly($dnd, 'version', function() { return _version; });
 
     return $dnd;
