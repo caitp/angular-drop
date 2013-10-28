@@ -1,0 +1,8 @@
+'use strict';
+
+/**
+ * @license AngularDrop v"DROP_VERSION_FULL"
+ * (c) 2013 Caitlin Potter & Contributors. http://caitp.github.io/angular-drop
+ * License: MIT
+ */
+(function(window, document, undefined) {

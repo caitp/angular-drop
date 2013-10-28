@@ -1,0 +1,4 @@
+
+  publishExternalAPI();
+
+})(window, document);
