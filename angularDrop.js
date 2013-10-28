@@ -8,12 +8,13 @@ angularDropFiles = {
   ],
 
   'angularDropTest': [
-    'test/helpers/*.js',
-    'test/*.js',
+    'test/**/*.spec.js',
   ],
 
   'karma': [
     'bower_components/jquery/jquery.js',
+    'bower_components/angular/angular.js',
+    'bower_components/angular-mocks/angular-mocks.js',
     'test/jquery_remove.js',
     '@angularDropSrc',
     'src/publish.js',
@@ -26,6 +27,8 @@ angularDropFiles = {
 
   'karmaJquery': [
     'bower_components/jquery/jquery.js',
+    'bower_components/angular/angular.js',
+    'bower_components/angular-mocks/angular-mocks.js',
     'test/jquery_alias.js',
     '@angularDropSrc',
     'src/publish.js',
