@@ -1,4 +1,4 @@
-##AngularDrop
+##AngularDrop [![Build Status](https://travis-ci.org/caitp/angular-drop.png?branch=master)](https://travis-ci.org/caitp/angular-drop) [![devDependency Status](https://david-dm.org/caitp/angular-drop/dev-status.png?branch=master)](https://david-dm.org/caitp/angular-drop#info=devDependencies)
 
 ###Drag & Drop functionality in AngularJS, no jQuery required
 
