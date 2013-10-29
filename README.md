@@ -2,6 +2,8 @@
 
 ###Drag & Drop functionality in AngularJS, no jQuery required
 
+[Demo](http://caitp.github.io/angular-drop)
+
 AngularDrop provides simple building blocks for Drag & Drop functionality in AngularJS.
 
 Drag & Drop is a fairly complex user interaction, even though it might seem trivial initially. It is further complicated in AngularJS by the concept of scopes, which can have a major impact on the content of a drag/dropped node.
