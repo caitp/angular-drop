@@ -168,9 +168,21 @@ module.exports = function(grunt) {
     write: {
       versionTXT: { file: 'build/version.txt', val: DROP_VERSION.full },
       versionJSON: { file: 'build/version.json', val: JSON.stringify(DROP_VERSION) }
+    },
+
+    'gh-pages': {
+      'gh-pages': {
+        options: {
+          base: 'build',
+          repo: 'https://github.com/caitp/angular-drop.git',
+          message: 'gh-pages v<%= pkg.version %>',
+          add: true
+        },
+        src: ['**/*']
+      }
     }
   });
-  
+
   // alias tasks
   grunt.registerTask('test', 'Run unit tests with Karma', ['package', 'test:unit']);
   grunt.registerTask('test:jqlite', 'Run the unit tests with Karma (jqLite only)', ['tests:jqlite']);
