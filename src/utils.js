@@ -1,6 +1,7 @@
 /**
- * @ngdoc property
- * @name $dnd.version
+ * @ngdoc object
+ * @module ui.drop
+ * @name ui.drop.Version
  * @description
  * An object that contains information about the current Angular-Drop version. This object has the
  * following properties:

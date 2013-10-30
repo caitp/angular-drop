@@ -176,9 +176,35 @@ module.exports = function(grunt) {
           base: 'build',
           repo: 'https://github.com/caitp/angular-drop.git',
           message: 'gh-pages v<%= pkg.version %>',
-          add: true
+          add: false
         },
         src: ['**/*']
+      }
+    },
+
+    ngdocs: {
+      options: {
+        dest: "build/docs",
+        scripts: [
+          'angular.js'
+        ],
+        styles: [
+          'docs/css/style.css'
+        ],
+        navTemplate: 'docs/nav.html',
+        title: 'AngularDrop',
+        image: 'logo.png',
+        imageLink: 'http://caitp.github.io/angular-drop',
+        titleLink: 'http://caitp.github.io/angular-drop',
+        html5Mode: false,
+        analytics: {
+          account: 'UA-44389518-1',
+          domainName: 'caitp.github.io'
+        }
+      },
+      api: {
+        src: ["src/**/*.js", "src/**/*.ngdoc"],
+        title: "API Documentation"
       }
     }
   });
