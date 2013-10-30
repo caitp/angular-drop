@@ -1,7 +1,7 @@
 
 
 /**
- * @license AngularDrop v0.0.1-a7a66ed
+ * @license AngularDrop v0.0.1-68e5506
  * (c) 2013 Caitlin Potter & Contributors. http://caitp.github.io/angular-drop
  * License: MIT
  */
@@ -22,7 +22,7 @@
  * - `codeName` – `{string}` – Code name of the release, such as "jiggling-armfat".
  */
 var _version = {
-  full: '0.0.1-a7a66ed',    // all of these placeholder strings will be replaced by grunt's
+  full: '0.0.1-68e5506',    // all of these placeholder strings will be replaced by grunt's
   major: '0',    // package task
   minor: '0',
   dot: '1',
