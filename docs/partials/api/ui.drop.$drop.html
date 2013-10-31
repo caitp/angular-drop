@@ -1,0 +1,78 @@
+<h1><code ng:non-bindable="">$drop</code>
+<span class="hint">(service in module <code ng:non-bindable="">ui.drop</code>
+)</span>
+</h1>
+<div><h2 id="Description">Description</h2>
+<div class="description"><p>Service responsible for controlling the behaviour of droppable nodes. $drop provides
+a mechanism to drop-enable any arbitrary element, which allows it to be used in
+custom directives, so that custom dragging behaviour can be achieved.</p></div>
+<h2 id="Dependencies">Dependencies</h2>
+<ul class="dependencies"><li><code ng:non-bindable=""><a href="#/api/ng.$document">$document</a></code>
+</li>
+<li><code ng:non-bindable=""><a href="#/api/ng.$rootScope">$rootScope</a></code>
+</li>
+</ul>
+<div class="member method"><h2 id="Methods">Methods</h2>
+<ul class="methods"><li><h3 id="drop">drop(event, y)</h3>
+<div class="drop"><p>Given a client position at which a mouse was released, or a mouse release is being
+simulated, this method attempts to find the nearest Droppable element, onto which the
+dragged element shall be dropped.</p>
+
+<p>The css display of the dragged element is set to 'none' so that
+<a href="https://developer.mozilla.org/en-US/docs/Web/API/document.elementFromPoint">document.elementFromPoint()</a> will not always return the dragged element.</p>
+
+<p>If implementing custom drag/drop functionality, it is important to ensure that the
+non-hidden css display be restored when finished.</p><h4 id="Parameters">Parameters</h4>
+<ul class="parameters"><li><code ng:non-bindable="">event – {Event|number} – </code>
+<p>Either a DOM Event object which contains client coordinates
+of a mouse release, or else the x coordinate at which the mouse was released.</p></li>
+<li><code ng:non-bindable="">y<i>(optional)</i> – {number=} – </code>
+<p>The second parameter may serve as the y coordinate at which the mouse
+was released, and is expected to be if <code>event</code> is a number.</p></li>
+</ul>
+</div>
+</li>
+<li><h3 id="droppable">droppable(element, options)</h3>
+<div class="droppable"><p>Queries for the Droppable state of a DOM node. If the element is not
+Droppable, and <code>options !== false</code>, then a new Droppable object is instantiated
+and associated with the element.</p>
+
+<p>As such, this method can be used to query for the existence of Droppable state
+attached to a DOM node, similar to <a href="#/api/ui.drop.$drop#isDroppable">isDroppable()</a>.</p>
+
+<p>TODO: Control actual behaviour of Droppable state with passed in options.</p><h4 id="Parameters">Parameters</h4>
+<ul class="parameters"><li><code ng:non-bindable="">element – {element} – </code>
+<p>jQuery / jqLite element or DOM node to be checked for
+Droppable state, or to be the element to which a new Droppable state is associated.</p></li>
+<li><code ng:non-bindable="">options – {object|boolean} – </code>
+<p>Configuration options for the Droppable state to be
+created. If set to false, no Droppable state will be created, and the function
+instead acts as a simple query.</p></li>
+</ul>
+<h4 id="Returns">Returns</h4>
+<div class="returns"><code ng:non-bindable="">{Object}</code>
+– <p>The Droppable state bound to the element.</p></div>
+</div>
+</li>
+<li><h3 id="isDroppable">isDroppable()</h3>
+<div class="isdroppable"><p>Query the droppable status of an element. Droppable in this context means
+that the element has Droppable state attached to it, and does not currently
+include other factors which might enable or disable the dropping a node into an
+element.</p><h4 id="Returns">Returns</h4>
+<div class="returns"><code ng:non-bindable="">{boolean}</code>
+– <p>The draggable status of an element (true if an element is
+drag-enabled, otherwise false)</p></div>
+</div>
+</li>
+</ul>
+</div>
+<div class="member property"><h2 id="Properties">Properties</h2>
+<ul class="properties"><li><h3 id="version">version</h3>
+<div class="version"><p>A reference to the global <a href="#/api/ui.drop.Version">ui.drop.Version</a> object.</p><h4 id="Returns">Returns</h4>
+<div class="returns"><code ng:non-bindable="">{ui.drop.Version}</code>
+– <p>Version</p></div>
+</div>
+</li>
+</ul>
+</div>
+</div>
