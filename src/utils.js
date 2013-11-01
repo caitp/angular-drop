@@ -20,7 +20,29 @@ var _version = {
   codeName: '"DROP_VERSION_CODENAME"'
 },
 
-currentDrag;
+currentDrag,
+
+booleans = {
+  'false': false,
+  'true': true,
+  '': true
+},
+
+unconst = function(value) {
+  if (typeof value === 'string') {
+    var num;
+    if (booleans.hasOwnProperty(value)) {
+      return booleans[value];
+    } else {
+      // TODO: Support floats?
+      num = parseInt(value, 10);
+      if (num===num) {
+        value = num;
+      }
+    }
+  }
+  return value;
+};
 
 function Draggable() {};
 function Droppable() {};
@@ -91,4 +113,50 @@ DOM = {
   isWindow: function(obj) {
     return obj && obj.document && obj.location && obj.alert && obj.setInterval;
   },
+
+  swapCss: function (element, css, callback, args) {
+    var ret, prop, old = {};
+    for (prop in css) {
+      old[prop] = element.style[prop];
+      element.style[prop] = css[prop];
+    }
+
+    ret = callback.apply(element, args || []);
+
+    for (prop in css) {
+      element.style[prop] = old[prop];
+    }
+
+    return ret;
+  },
+
+  swapDisplay: /^(none|table(?!-c[ea]).+)/,
+
+  cssShow: {
+    position: 'absolute',
+    visibility: 'hidden',
+    display: 'block'
+  },
+
+  size: function(node) {
+    var jq = angular.element(node);
+    node = node.nodeName ? node : node[0];
+    if (node.offsetWidth === 0 && DOM.swapDisplay.test(jq.css('display'))) {
+      return DOM.swapCss(node, DOM.cssShow, getHeightAndWidth, [node]);
+    }
+    return getHeightAndWidth(node);
+
+    function getHeightAndWidth(element) {
+      return {
+        width: element.offsetWidth,
+        height: element.offsetHeight
+      };
+    }
+  },
+  keepSize: function(node) {
+    var css = DOM.size(node);
+    css.width = css.width + 'px';
+    css.height = css.height + 'px';
+    return css;
+  }
 };

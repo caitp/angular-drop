@@ -256,6 +256,11 @@ var $dropProvider = function() {
 
         this.element.append(draggable.element);
 
+        if (draggable.options.keepSize) {
+          draggable.element.css(draggable.keepSize);
+          draggable.keepSize = undefined;
+        }
+
         draggable.element.css({
           display: options.display
         });

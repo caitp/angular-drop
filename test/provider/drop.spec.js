@@ -42,7 +42,7 @@ describe('$drop', function() {
       droppable.drop(element);
 
       expect(d1.children().length).toEqual(2);
-      expect(d1.children().last().prop('id')).toEqual('draggable');
+      expect(d1.children().eq(1).prop('id')).toEqual('draggable');
     });
   });
 });
