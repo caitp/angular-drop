@@ -1,7 +1,7 @@
 
 
 /**
- * @license AngularDrop v0.0.1-76070f9
+ * @license AngularDrop v0.0.1-05022bb
  * (c) 2013 Caitlin Potter & Contributors. http://caitp.github.io/angular-drop
  * License: MIT
  */
@@ -22,14 +22,36 @@
  * - `codeName` – `{string}` – Code name of the release, such as "jiggling-armfat".
  */
 var _version = {
-  full: '0.0.1-76070f9',    // all of these placeholder strings will be replaced by grunt's
+  full: '0.0.1-05022bb',    // all of these placeholder strings will be replaced by grunt's
   major: '0',    // package task
   minor: '0',
   dot: '1',
   codeName: 'badger'
 },
 
-currentDrag;
+currentDrag,
+
+booleans = {
+  'false': false,
+  'true': true,
+  '': true
+},
+
+unconst = function(value) {
+  if (typeof value === 'string') {
+    var num;
+    if (booleans.hasOwnProperty(value)) {
+      return booleans[value];
+    } else {
+      // TODO: Support floats?
+      num = parseInt(value, 10);
+      if (num===num) {
+        value = num;
+      }
+    }
+  }
+  return value;
+};
 
 function Draggable() {};
 function Droppable() {};
@@ -100,6 +122,52 @@ DOM = {
   isWindow: function(obj) {
     return obj && obj.document && obj.location && obj.alert && obj.setInterval;
   },
+
+  swapCss: function (element, css, callback, args) {
+    var ret, prop, old = {};
+    for (prop in css) {
+      old[prop] = element.style[prop];
+      element.style[prop] = css[prop];
+    }
+
+    ret = callback.apply(element, args || []);
+
+    for (prop in css) {
+      element.style[prop] = old[prop];
+    }
+
+    return ret;
+  },
+
+  swapDisplay: /^(none|table(?!-c[ea]).+)/,
+
+  cssShow: {
+    position: 'absolute',
+    visibility: 'hidden',
+    display: 'block'
+  },
+
+  size: function(node) {
+    var jq = angular.element(node);
+    node = node.nodeName ? node : node[0];
+    if (node.offsetWidth === 0 && DOM.swapDisplay.test(jq.css('display'))) {
+      return DOM.swapCss(node, DOM.cssShow, getHeightAndWidth, [node]);
+    }
+    return getHeightAndWidth(node);
+
+    function getHeightAndWidth(element) {
+      return {
+        width: element.offsetWidth,
+        height: element.offsetHeight
+      };
+    }
+  },
+  keepSize: function(node) {
+    var css = DOM.size(node);
+    css.width = css.width + 'px';
+    css.height = css.height + 'px';
+    return css;
+  }
 };
 
 /**
@@ -112,13 +180,24 @@ DOM = {
  * Simple directive which denotes a 'draggable' widget. Currently, there are no parameters,
  * and it is impossible to configure the directive's behaviour.
  *
- * TODO: Provide faculties for configuring the directive.
+ * @param {boolean=} drag-keep-size The dragged item should maintain its original size while dragging
+ *   if set to true. Default: false.
  */
-var draggableDirective = ['$drag', '$document', '$timeout', function($drag, $document, $timeout) {
+var draggableOptions = {
+  'dragKeepSize': 'keepSize'
+};
+var draggableDirective = [
+  '$drag', '$document', '$interpolate', '$timeout', function($drag, $document, $interpolate, $timeout) {
   return {
     restrict: 'A',
     link: function(scope, element, attrs) {
-      var drag = $drag.draggable(element);
+      var options = {};
+      angular.forEach(draggableOptions, function(name, attr) {
+        if (typeof attrs[attr] !== 'undefined') {
+          options[name] = unconst($interpolate(attrs[attr], false)(scope));
+        }
+      });
+      $drag.draggable(element, options);
     }
   };
 }];
@@ -178,7 +257,9 @@ var $dragProvider = function() {
        *   Draggable state, or to be the element to which a new Draggable state is associated.
        * @param {object|boolean} options Configuration options for the Draggable state to be
        *   created. If set to false, no Draggable state will be created, and the function
-       *   instead acts as a simple query.
+       *   instead acts as a simple query. Option values include:
+       *   - keepSize {boolean} The dragged item should maintain its original size while dragging
+       *     if set to true. Default: false.
        *
        * @description
        *
@@ -188,8 +269,6 @@ var $dragProvider = function() {
        *
        * As such, this method can be used to query for the existence of Draggable state
        * attached to a DOM node, similar to {@link ui.drop.$drag#isDraggable isDraggable()}.
-       *
-       * TODO: Control actual behaviour of Draggable state with passed in options.
        */
       draggable: function(element, options) {
         element = angular.element(element);
@@ -268,9 +347,9 @@ var $dragProvider = function() {
        * for more details.
        */
       dragStart: function(event) {
-        fixup(event);
+        event = fixup(event);
         event.preventDefault();
-        var self = $drag.draggable(this);
+        var self = isDraggable(this) ? this : $drag.draggable(this);
 
         if (currentDrag) {
           currentDrag.dragEnd(event);
@@ -281,6 +360,14 @@ var $dragProvider = function() {
         self.cssDisplay = self.element.css('display');
         if (!self.hanging) {
           self.cssPosition = self.element.css("position");
+
+          if (self.options.keepSize) {
+            self.keepSize = {
+              width: self.element[0].style['width'],
+              height: self.element[0].style['height']
+            };
+            self.element.css(DOM.keepSize(self.element));
+          }
         }
 
         self.offset = self.positionAbs = DOM.offset(self.element);
@@ -367,7 +454,7 @@ var $dragProvider = function() {
        * position as an absolute position to the element's style.
        */
       drag: function(event) {
-        fixup(event);
+        event = fixup(event);
         event.preventDefault();
 
         var self = currentDrag;
@@ -462,14 +549,16 @@ var $dragProvider = function() {
 
   function fixup(event) {
     if (angular.isUndefined(event)) {
-      event = window.event;
+      event = window.event || {pageX: 0, pageY: 0, preventDefault: function() {}};
     }
-    if (angular.isUndefined(event.layerX)) {
-      event.layerX = event.offsetX;
+    if (!angular.isFunction(event.preventDefault)) {
+      event.preventDefault = function() {};
     }
-    if (angular.isUndefined(event.layerY)) {
-      event.layerY = event.offsetY;
-    }
+    return event;
+  }
+
+  function isDraggable(thing) {
+    return angular.isObject(thing) && thing.constructor === Draggable;
   }
 };
 
@@ -727,6 +816,11 @@ var $dropProvider = function() {
         });
 
         this.element.append(draggable.element);
+
+        if (draggable.options.keepSize) {
+          draggable.element.css(draggable.keepSize);
+          draggable.keepSize = undefined;
+        }
 
         draggable.element.css({
           display: options.display
