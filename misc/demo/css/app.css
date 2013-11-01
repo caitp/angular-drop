@@ -4,6 +4,7 @@ body {
   -webkit-transition: opacity 1s ease;
   -moz-transition: opacity 1s ease;
   transition: opacity 1s;
+  padding-bottom: 10em;
 }
 
 .jumbotron {
@@ -82,11 +83,32 @@ a>.text {
   user-select: none;
 }
 
-.panel > div {
+.panel > .dropdemo {
   min-height: 100px;
 }
 
 .dropzone {
   text-align: center;
   color: #eee;
+}
+
+.map-body {
+  height: 435px;
+  width: 580px;
+  background: url(../img/map.jpg) no-repeat left top;
+  margin: 0 auto;
+  -webkit-border-radius: 16px;
+  -moz-border-radius: 16px;
+  -ms-border-radius: 16px;
+  -o-border-radius: 16px;
+  border-radius: 16px;
+  -webkit-box-shadow: 0px 10px 16px 4px rgba(128, 128, 128, .5);
+  -moz-box-shadow: 0px 10px 16px 4px rgba(128, 128, 128, .5);
+  -ms-box-shadow: 0px 10px 16px 4px rgba(128, 128, 128, .5);
+  -o-box-shadow: 0px 10px 16px 4px rgba(128, 128, 128, .5);
+  box-shadow: 0px 10px 16px 4px rgba(128, 128, 128, .5);
+}
+
+[draggable]:hover {
+  cursor: move;
 }

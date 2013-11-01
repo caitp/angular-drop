@@ -66,7 +66,7 @@ readonly = function(target, name, fn) {
 DOM = {
   nodeEq: function(node, name) {
     return (typeof (node.nodeName === 'string' ?
-            node.nodeName : node[0].nodeName).toUpperCase() === name);
+            node.nodeName.toLowerCase() : node[0].nodeName).toLowerCase() === name);
   },
 
   offset: function(node) {
@@ -158,5 +158,19 @@ DOM = {
     css.width = css.width + 'px';
     css.height = css.height + 'px';
     return css;
+  },
+  closest: function(node, value) {
+    node = angular.element(node);
+    if ($.fn && angular.isFunction($.fn.closest)) {
+      return node.closest(value);
+    }
+    // Otherwise, assume it's a tag name...
+    node = node[0];
+    value = value.toLowerCase();
+    do {
+      if (node.nodeName.toLowerCase() === value) {
+        return angular.element(node);
+      }
+    } while (node = node.parentNode);
   }
 };

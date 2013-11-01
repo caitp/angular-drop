@@ -41,6 +41,10 @@ describe('$drag', function() {
     var parent, $body;
     beforeEach(inject(function(_$document_) {
       $body = _$document_.find('body');
+      $body.css({
+        margin: '0',
+        padding: '0'
+      });
     }));
     beforeEach(function() {
       parent = angular.element('<div style="width: 100px; height: 100px;"></div>');
@@ -56,6 +60,24 @@ describe('$drag', function() {
       draggable.dragStart();
       expect(style.width).toEqual('100px');
       expect(style.height).toEqual('100px');
+    });
+
+
+    it('should keep element within constraints when dragWithin is set', function() {
+      element.css({ height: '1px', width: '1px' });
+      var draggable = $drag.draggable(element, { dragWithin: 'parent' }),
+          style = element.prop('style');
+      draggable.dragStart();
+
+      draggable.drag({pageX: 99, pageY: 99});
+      // Position changes due to being within constrained area
+      expect(parseInt(style.left, 10)).toEqual(99);
+      expect(parseInt(style.top, 10)).toEqual(99);
+
+      draggable.drag({pageX: 101, pageY: 101});
+      // Position remains same due to being dragged outside of constrained area
+      expect(parseInt(style.left, 10)).toEqual(99);
+      expect(parseInt(style.top, 10)).toEqual(99);
     });
   });
 });
