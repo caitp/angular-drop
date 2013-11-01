@@ -7,7 +7,7 @@ describe('$drag', function() {
     $dnd = _$dnd_;
     $compile = _$compile_;
     $rootScope = _$rootScope_;
-    element = angular.element('<div></div>');
+    element = angular.element('<div style="height:100%; width: 100%;"></div>');
   }));
   afterEach(function() {
     if (element) {
@@ -35,5 +35,27 @@ describe('$drag', function() {
     var instance = $drag.draggable(element);
     element.triggerHandler('mousedown');
     expect($drag.current).toEqual(instance);
+  });
+
+  describe('DOM manipulation', function() {
+    var parent, $body;
+    beforeEach(inject(function(_$document_) {
+      $body = _$document_.find('body');
+    }));
+    beforeEach(function() {
+      parent = angular.element('<div style="width: 100px; height: 100px;"></div>');
+      parent.append(element);
+      $body.append(parent);
+    });
+    afterEach(function() {
+      parent.remove();
+      parent = undefined;
+    });
+    it('should keep a dragged elements size when keepSize is true', function() {
+      var draggable = $drag.draggable(element, { keepSize: true }), style = element.prop('style');
+      draggable.dragStart();
+      expect(style.width).toEqual('100px');
+      expect(style.height).toEqual('100px');
+    });
   });
 });
