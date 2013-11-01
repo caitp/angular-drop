@@ -37,4 +37,16 @@ describe('draggable directive', function() {
       expect(!!$drag.draggable(element, false).options.keepSize).toEqual(expected);
     });
   });
+
+  it('should set the `dragWithin` option to the passed string', function() {
+    element = $compile('<div draggable drag-within="body"></div>')($rootScope);
+    expect($drag.draggable(element, false).options.dragWithin).toEqual('body');
+  });
+
+
+  it('should set the `dragWithin` option to the interpolated attribute value', function() {
+    $rootScope.dragWithin = "body";
+    element = $compile('<div draggable drag-within="{{dragWithin}}"></div>')($rootScope);
+    expect($drag.draggable(element, false).options.dragWithin).toEqual('body');
+  });
 });
