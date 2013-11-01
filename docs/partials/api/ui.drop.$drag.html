@@ -31,6 +31,10 @@ instead acts as a simple query. Option values include:</p>
 <ul>
 <li>keepSize {boolean} The dragged item should maintain its original size while dragging
 if set to true. Default: false.</li>
+<li>dragWithin {string} Provides a constraint to limit the area through which an element
+may be dragged. It may be a tag name, or the special value '^' or 'parent' to refer to
+the parent element. If jQuery is in use, it may also be a selector supported by
+jQuery's <a href="http://api.jquery.com/closest/">$.fn.closest</a>.</li>
 </ul></li>
 </ul>
 <h4 id="Returns">Returns</h4>

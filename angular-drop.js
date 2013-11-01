@@ -1,7 +1,7 @@
 
 
 /**
- * @license AngularDrop v0.0.1-d6ac37c
+ * @license AngularDrop v0.0.1-0110d87
  * (c) 2013 Caitlin Potter & Contributors. http://caitp.github.io/angular-drop
  * License: MIT
  */
@@ -22,7 +22,7 @@
  * - `codeName` – `{string}` – Code name of the release, such as "jiggling-armfat".
  */
 var _version = {
-  full: '0.0.1-d6ac37c',    // all of these placeholder strings will be replaced by grunt's
+  full: '0.0.1-0110d87',    // all of these placeholder strings will be replaced by grunt's
   major: '0',    // package task
   minor: '0',
   dot: '1',
@@ -75,7 +75,7 @@ readonly = function(target, name, fn) {
 DOM = {
   nodeEq: function(node, name) {
     return (typeof (node.nodeName === 'string' ?
-            node.nodeName : node[0].nodeName).toUpperCase() === name);
+            node.nodeName.toLowerCase() : node[0].nodeName).toLowerCase() === name);
   },
 
   offset: function(node) {
@@ -167,6 +167,20 @@ DOM = {
     css.width = css.width + 'px';
     css.height = css.height + 'px';
     return css;
+  },
+  closest: function(node, value) {
+    node = angular.element(node);
+    if ($.fn && angular.isFunction($.fn.closest)) {
+      return node.closest(value);
+    }
+    // Otherwise, assume it's a tag name...
+    node = node[0];
+    value = value.toLowerCase();
+    do {
+      if (node.nodeName.toLowerCase() === value) {
+        return angular.element(node);
+      }
+    } while (node = node.parentNode);
   }
 };
 
@@ -182,9 +196,14 @@ DOM = {
  *
  * @param {boolean=} drag-keep-size The dragged item should maintain its original size while dragging
  *   if set to true. Default: false.
+ * @param {string=} drag-within Provides a constraint to limit the area through which an element may
+ *   be dragged. It may be a tag name, or the special value '^' or 'parent' to refer to the parent
+ *   element. If jQuery is in use, it may also be a selector supported by jQuery's 
+ *   {@link http://api.jquery.com/closest/ $.fn.closest}.
  */
 var draggableOptions = {
-  'dragKeepSize': 'keepSize'
+  'dragKeepSize': 'keepSize',
+  'dragWithin': 'dragWithin'
 };
 var draggableDirective = [
   '$drag', '$document', '$interpolate', '$timeout', function($drag, $document, $interpolate, $timeout) {
@@ -261,6 +280,10 @@ var $dragProvider = function() {
        *
        *   - keepSize {boolean} The dragged item should maintain its original size while dragging
        *     if set to true. Default: false.
+       *   - dragWithin {string} Provides a constraint to limit the area through which an element
+       *     may be dragged. It may be a tag name, or the special value '^' or 'parent' to refer to
+       *     the parent element. If jQuery is in use, it may also be a selector supported by
+       *     jQuery's {@link http://api.jquery.com/closest/ $.fn.closest}.
        *
        * @description
        *
@@ -285,7 +308,6 @@ var $dragProvider = function() {
         }
 
         options = angular.extend({
-          constraints: null,
           delay: 500,
           distance: 1
         }, options || {});
@@ -359,6 +381,7 @@ var $dragProvider = function() {
         currentDrag = self;
 
         self.cssDisplay = self.element.css('display');
+        self.dimensions = DOM.size(self.element);
         if (!self.hanging) {
           self.cssPosition = self.element.css("position");
 
@@ -369,6 +392,10 @@ var $dragProvider = function() {
             };
             self.element.css(DOM.keepSize(self.element));
           }
+        }
+
+        if (typeof self.options.dragWithin === 'string') {
+          self.constraints = dragConstraints(self.options.dragWithin, self.element);
         }
 
         self.offset = self.positionAbs = DOM.offset(self.element);
@@ -474,8 +501,11 @@ var $dragProvider = function() {
         ny = parseInt(y, 10) + (position.top - self.lastMouseY);
         nx = parseInt(x, 10) + (position.left - self.lastMouseX);
 
-        style.left = nx + "px";
-        style.top = ny + "px";
+        if (!self.constraints || withinConstraints(self.constraints, nx, ny,
+            self.dimensions.width, self.dimensions.height)) {
+          style.left = nx + "px";
+          style.top = ny + "px";
+        }
 
         self.lastMouseY = position.top;
         self.lastMouseX = position.left;
@@ -503,6 +533,7 @@ var $dragProvider = function() {
         this.element.css({
           position: this.cssPosition
         });
+        this.dimensions = undefined;
         currentDrag = undefined;
       }
     };
@@ -560,6 +591,36 @@ var $dragProvider = function() {
 
   function isDraggable(thing) {
     return angular.isObject(thing) && thing.constructor === Draggable;
+  }
+
+  function dragConstraints(value, element) {
+    if (value.length === '') {
+      return;
+    }
+    if (/^(\.|#)/.test(value) && $.fn && angular.isFunction($.fn.closest)) {
+      // Find nearest element matching class
+      return constraintsFor(element.parent().closest(value));
+    }
+    if (/^(\^|parent)$/.test(value)) {
+      return constraintsFor(element.parent());
+    }
+    return constraintsFor(DOM.closest(element.parent(), value));
+  }
+
+  function constraintsFor(element) {
+    if (typeof element === 'undefined' || element.length === 0) {
+      return;
+    }
+    // Use offset + width/height for now?
+    var constraints = DOM.offset(element),
+        dimensions = DOM.size(element);
+    constraints.right = constraints.left + dimensions.width;
+    constraints.bottom = constraints.top + dimensions.height;
+    return constraints;
+  }
+
+  function withinConstraints(c, x, y, w, h) {
+    return x >= c.left && (x+w) <= c.right && y >= c.top && (y+h) <= c.bottom;
   }
 };
 

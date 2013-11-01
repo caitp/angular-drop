@@ -56,19 +56,37 @@
       </div>
     </header>
     <div class="container">
+      <div class="page-header">
+        <h3>Simple Drag &amp; Drop</h3>
+      </div>
       <div class="panel panel-default">
-        <div class="panel-heading" droppable ng-controller="DropCtrl">
+        <div class="panel-heading dropdemo" droppable ng-controller="DropCtrl">
           <div class="drag" draggable drag-keep-size="true">
             <h2>Drag me <small>anywhere you want me to go</small></h2>
             <p>If dropped into one of these three areas, I will snap into place. Otherwise, I'll just hang around.</p>
           </div>
           <h2 ng-if="!hasElement()" class="dropzone">[ Drop Zone ]</h2>
         </div>
-        <div class="panel-body" droppable ng-controller="DropCtrl">
+        <div class="panel-body dropdemo" droppable ng-controller="DropCtrl">
           <h2 ng-if="!hasElement()" class="dropzone">[ Drop Zone ]</h2>
         </div>
-        <div class="panel-footer" droppable ng-controller="DropCtrl">
+        <div class="panel-footer dropdemo" droppable ng-controller="DropCtrl">
           <h2 ng-if="!hasElement()" class="dropzone">[ Drop Zone ]</h2>
+        </div>
+      </div>
+      <div class="page-header">
+        <h3>Constrained Dragging Within Parent</h3>
+      </div>
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3>Drag the cursor around the world</h3>
+        </div>
+        <div class="panel-body center">
+          <div class="map-body">
+            <img draggable drag-within="parent" src="img/appbar.location.round.png" alt="Drag me around" style="position:relative; top:280px; left:35px;" />
+          </div>
+        </div>
+        <div class="panel-footer">
         </div>
       </div>
     </div>

@@ -25,7 +25,7 @@ NG_DOCS={
       "moduleName": "ui.drop",
       "shortName": "$drag",
       "type": "object",
-      "keywords": "$document $drag $drop achieved acts allows an and any api arbitrary as associated at attached be behaviour being bound can checked configuration context controlling created current currently custom default directives disable does dom drag-enable drag-enabled draggable dragged dragging drop element enable existence factors false for function given global has if in include instance instantiated instead is isdraggable it item its jqlite jquery keepsize maintain means mechanism method might moment new no node nodes not object of option options or original other otherwise property provides queries query reference representing responsible service set should similar simple size so state status such that the then this to true ui undefined used values version which while will with"
+      "keywords": "$document $drag $drop achieved acts allows also an and any api arbitrary area as associated at attached be behaviour being bound by can checked closest com configuration constraint context controlling created current currently custom default directives disable does dom drag-enable drag-enabled draggable dragged dragging dragwithin drop element enable existence factors false fn for function given global has http if in include instance instantiated instead is isdraggable it item its jqlite jquery keepsize limit maintain may means mechanism method might moment name new no node nodes not object of option options or original other otherwise parent property provides queries query refer reference representing responsible selector service set should similar simple size so special state status such supported tag that the then this through to true ui undefined use used value values version which while will with"
     },
     {
       "section": "api",
@@ -73,7 +73,7 @@ NG_DOCS={
       "moduleName": "ui.drop",
       "shortName": "draggable",
       "type": "directive",
-      "keywords": "and api are behaviour configure currently default denotes directive drag-keep-size draggable dragged dragging drop false if impossible is it item its maintain no original parameters set should simple size the there to true ui which while widget"
+      "keywords": "also an and api are area be behaviour by closest com configure constraint currently default denotes directive drag-keep-size drag-within draggable dragged dragging drop element false fn http if impossible in is it item its jquery limit maintain may name no or original parameters parent provides refer selector set should simple size special supported tag the there through to true ui use value which while widget"
     },
     {
       "section": "api",
