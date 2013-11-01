@@ -1,7 +1,7 @@
 
 
 /**
- * @license AngularDrop v0.0.1-05022bb
+ * @license AngularDrop v0.0.1-d6ac37c
  * (c) 2013 Caitlin Potter & Contributors. http://caitp.github.io/angular-drop
  * License: MIT
  */
@@ -22,7 +22,7 @@
  * - `codeName` – `{string}` – Code name of the release, such as "jiggling-armfat".
  */
 var _version = {
-  full: '0.0.1-05022bb',    // all of these placeholder strings will be replaced by grunt's
+  full: '0.0.1-d6ac37c',    // all of these placeholder strings will be replaced by grunt's
   major: '0',    // package task
   minor: '0',
   dot: '1',
@@ -258,6 +258,7 @@ var $dragProvider = function() {
        * @param {object|boolean} options Configuration options for the Draggable state to be
        *   created. If set to false, no Draggable state will be created, and the function
        *   instead acts as a simple query. Option values include:
+       *
        *   - keepSize {boolean} The dragged item should maintain its original size while dragging
        *     if set to true. Default: false.
        *
