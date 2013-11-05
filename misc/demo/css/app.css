@@ -54,10 +54,12 @@ a>.text {
   display: none;
 }
 
-.in a>.text, .collapsing a>.text {
-  display: inline;
-  font-weight: light;
-  font-size: 16px;
+@media (max-width: 767px) {
+  .in a>.text, .collapsing a>.text {
+    display: inline;
+    font-weight: light;
+    font-size: 16px;
+  }
 }
 
 .drag {
