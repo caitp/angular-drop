@@ -46,13 +46,14 @@ module.exports = function(grunt) {
         options: {
           port: 8000,
           hostname: '0.0.0.0',
-          base: '.',
+          base: 'build/',
           keepalive: true,
           middleware: function(connect, options) {
+            var doc_root = path.resolve(options.base);
             return [
-              util.rewrite(),
-              connect.static(options.base),
-              connect.directory(options.base)
+              connect.logger('dev'),
+              connect.static(doc_root),
+              connect.directory(doc_root)
             ];
           }
         }
