@@ -1,7 +1,7 @@
 
 
 /**
- * @license AngularDrop v0.0.1-3446523
+ * @license AngularDrop v0.0.1-0c0bac3
  * (c) 2013 Caitlin Potter & Contributors. http://caitp.github.io/angular-drop
  * License: MIT
  */
@@ -22,7 +22,7 @@
  * - `codeName` – `{string}` – Code name of the release, such as "jiggling-armfat".
  */
 var _version = {
-  full: '0.0.1-3446523',    // all of these placeholder strings will be replaced by grunt's
+  full: '0.0.1-0c0bac3',    // all of these placeholder strings will be replaced by grunt's
   major: '0',    // package task
   minor: '0',
   dot: '1',
@@ -631,8 +631,8 @@ var $dragProvider = function() {
  *
  * @description
  *
- * Simple directive which denotes a 'draggable' widget. Currently, there are no parameters,
- * and it is impossible to configure the directive's behaviour.
+ * Simple directive which denotes a 'droppable' widget (an area onto which adraggable may be dropped).
+ * Currently, there are no parameters, and it is impossible to configure the directive's behaviour.
  *
  * TODO: Provide faculties for configuring the directive.
  */
