@@ -1,0 +1,39 @@
+<h1><code ng:non-bindable="">Droppable</code>
+<span class="hint">(type in module <code ng:non-bindable="">ui.drop</code>
+)</span>
+</h1>
+<div><h2 id="Description">Description</h2>
+<div class="description"><p>Droppable state is an object containing the droppable state of a particular DOM node.
+It is instantiated and attached via <a href="#/api/ui.drop.$drop#droppable">droppable()</a>.</p>
+
+<p>The Droppable object is attached to a DOM node via jqLite / jQuery's expandostore,
+using the key <code>$droppable</code>. However, it is recomended that querying for a node's
+Droppable state be done using <a href="#/api/ui.drop.$drop#droppable">droppable()</a> or
+<a href="#/api/ui.drop.$drop#isDroppable">isDroppable()</a>, in case the expandostore key is
+changed in the future.</p>
+
+<p>This object provides helpers, including a mechanism to programmatically drop an
+arbitrary Draggable onto the current Droppable. This mechanic is used by
+<a href="#/api/ui.drop.$drop#drop">$drop.drop()</a> in order to complete the work.</p></div>
+<h2 id="Usage">Usage</h2>
+<div class="usage"><pre class="prettyprint linenums">Droppable();</pre>
+<h3 id="Returns">Returns</h3>
+<div class="returns"><code ng:non-bindable="">{Object}</code>
+– <p>Newly created Droppable instance.</p></div>
+</div>
+<div class="member method"><h2 id="Methods">Methods</h2>
+<ul class="methods"><li><h3 id="drop">drop(draggable, options)</h3>
+<div class="drop"><p>Simplifies the process of dropping a dragged element over a $droppable element,
+and appending it to the $droppable node's children.</p><h4 id="Parameters">Parameters</h4>
+<ul class="parameters"><li><code ng:non-bindable="">draggable<i>(optional)</i> – {Draggable=} – </code>
+<p>The Draggable state of the dragged element, or
+the current dragging object by default.</p></li>
+<li><code ng:non-bindable="">options<i>(optional)</i> – {options=} – </code>
+<p>Presently this parameter is essentially unused. It is
+intended to enable some customized behaviour in the future.</p></li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
