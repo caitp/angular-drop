@@ -8,8 +8,8 @@
  *
  * @description
  *
- * Simple directive which denotes a 'draggable' widget. Currently, there are no parameters,
- * and it is impossible to configure the directive's behaviour.
+ * Simple directive which denotes a 'droppable' widget (an area onto which adraggable may be dropped).
+ * Currently, there are no parameters, and it is impossible to configure the directive's behaviour.
  *
  * TODO: Provide faculties for configuring the directive.
  */
