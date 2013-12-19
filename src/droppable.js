@@ -9,15 +9,23 @@
  * @description
  *
  * Simple directive which denotes a 'droppable' widget (an area onto which adraggable may be dropped).
- * Currently, there are no parameters, and it is impossible to configure the directive's behaviour.
  *
- * TODO: Provide faculties for configuring the directive.
+ * @param {string=} allowed provides a class constraint for which all draggables must contain in order to be dropped
+ * within this droppable.  If no allowed is provided, all draggables will be allowed.  To specify multiple allowed
+ * classes provide multiple classes separated by  commas (allowed="class-one, class-two").
+ *
  */
-var droppableDirective = ['$drop', function($drop) {
+var droppableDirective = ['$drop', '$parse', function($drop, $parse) {
   return {
     restrict: 'A',
-    link: function(scope, element, attrs) {
-      $drop.droppable(element);
+    compile: function($element, $attrs) {
+      return function(scope, element, attrs) {
+        var allowedClasses = $parse(attrs.dropAllowed || 'undefined')(scope);
+        var droppable = $drop.droppable(element);
+        if (allowedClasses) {
+          droppable.allowedClasses(allowedClasses);
+        }
+      }
     }
   };
 }];
@@ -180,7 +188,7 @@ var $dropProvider = function() {
         element = angular.element(element);
         $droppable = element.inheritedData('$droppable');
 
-        if (!$droppable) {
+        if (!$droppable || !this.dropAllowed($droppable, current.element)) {
           // Element is not droppable...
           return badDrop();
         }
@@ -197,6 +205,39 @@ var $dropProvider = function() {
           currentDrag = undefined;
           $rootScope.$emit("$badDrop", current);
         }
+      },
+
+      /**
+       * @ngdoc method
+       * @module ui.drop
+       * @name ui.drop.$drop#dropAllowed
+       * @methodOf ui.drop.$drop
+       *
+       * @param {droppable} The ui.drop.$drop.Droppable object
+       * @param {draggable} An angular.element() object representing the draggable
+       * @returns {boolean} whether or not the drop is allowed based
+       *
+       * @description
+       * Function to check if the provided draggable element has the class of the provided droppables 'allowed'
+       * attribute.  Returns true if a match is found, or false otherwise.
+       *
+       */
+      dropAllowed: function(droppable, draggable) {
+        var allowedClasses = droppable.allowedClasses();
+        if (!allowedClasses || !angular.isArray(allowedClasses)) {
+          return true;
+        }
+
+        for (var i = 0; i < allowedClasses.length; ++i) {
+          var curClass = allowedClasses[i];
+          // remove spaces if present
+          if (typeof curClass === 'string') {
+            if (draggable.hasClass(curClass)) {
+              return true;
+            }
+          }
+        }
+        return false;
       }
     };
 
@@ -270,6 +311,33 @@ var $dropProvider = function() {
         }
         draggable.finish();
       },
+
+      /**
+       * @ngdoc function
+       * @module ui.drop
+       * @name ui.drop.Droppable#allowedClasses
+       * @methodOf ui.drop.$drop.Droppable
+       * @function
+       *
+       * @param {allowedClasses} An array of strings representing classes of draggables which can be dropped within
+       * the draggable
+       * @returns {Array} Array of strings
+       *
+       * @description
+       * A Setter/Getter method for the array of allowed classes for this droppable.
+       */
+      allowedClasses: function(allowedClasses) {
+        if (arguments.length > 0) {
+          if (typeof allowedClasses === 'string') {
+            allowedClasses = allowedClasses.split(',');
+          }
+          if (angular.isArray(allowedClasses)) {
+            this.allowed = allowedClasses;
+          }
+          return this;
+        }
+        return this.allowed;
+      }
     };
 
     /**
