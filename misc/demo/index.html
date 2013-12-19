@@ -61,7 +61,7 @@
       </div>
       <div class="panel panel-default">
         <div class="panel-heading dropdemo" droppable ng-controller="DropCtrl">
-          <div class="drag" draggable drag-keep-size="true">
+          <div class="drag" draggable constrain-to="dropzone" drag-keep-size="true">
             <h2>Drag me <small>anywhere you want me to go</small></h2>
             <p>If dropped into one of these three areas, I will snap into place. Otherwise, I'll just hang around.</p>
           </div>
@@ -72,6 +72,9 @@
         </div>
         <div class="panel-footer dropdemo" droppable ng-controller="DropCtrl">
           <h2 ng-if="!hasElement()" class="dropzone">[ Drop Zone ]</h2>
+        </div>
+        <div class="panel-footer dropdemo" droppable ng-controller="DropCtrl">
+          <h2 ng-if="!hasElement()">[ Drop Zone ]</h2>
         </div>
       </div>
       <div class="page-header">
@@ -93,7 +96,7 @@
     <script src="js/jquery.min.js"></script>
     <script src="js/angular.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
-    <script src="angular-drop.js"></script>
+    <script src="../../build/angular-drop.js"></script>
     <script src="js/app.js"></script>
     <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
     <script>
