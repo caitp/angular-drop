@@ -193,22 +193,7 @@ var $dropProvider = function() {
           if (!element || !className) {
             return true;
           }
-          var childDropAllowed = false, dropAllowed = false;
-
-          // check child elements
-          angular.forEach(element.children(), function(child) {
-            if (angular.element(child).hasClass(className)) {
-              childDropAllowed = true;
-              return;
-            }
-          });
-
-          // if child elements are valid, ensure parent is
-          if (element.hasClass(className)) {
-            dropAllowed = true;
-          }
-
-          return dropAllowed || childDropAllowed;
+          return element.hasClass(className);
         }
 
         function badDrop() {
