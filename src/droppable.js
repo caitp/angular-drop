@@ -180,7 +180,7 @@ var $dropProvider = function() {
         element = angular.element(element);
         $droppable = element.inheritedData('$droppable');
 
-        if (!$droppable || !dropAllowed(element, current.options.constrainTo)) {
+        if (!$droppable || !this.dropAllowed(element, current.options.constrainTo)) {
           // Element is not droppable...
           return badDrop();
         }
@@ -188,13 +188,6 @@ var $dropProvider = function() {
         $droppable.drop(current);
 
         return true;
-
-        function dropAllowed(element, className) {
-          if (!element || !className) {
-            return true;
-          }
-          return element.hasClass(className);
-        }
 
         function badDrop() {
           current.hanging = true;
@@ -204,6 +197,29 @@ var $dropProvider = function() {
           currentDrag = undefined;
           $rootScope.$emit("$badDrop", current);
         }
+      },
+
+      /**
+       * @ngdoc method
+       * @module ui.drop
+       * @name ui.drop.$drop#dropAllowed
+       * @methodOf ui.drop.$drop
+       *
+       * @param {element} An angular.element() object
+       * @param {className} Class name as string.
+       * @returns {boolean} whether or not the drop is allowed based
+       *
+       * @description
+       * Function to check if the provided element contains the provided class.  Returns true if a match is found, or
+       * if either of the arguments are undefined.  False is returned if the element does not contain the provided
+       * class.
+       *
+       */
+      dropAllowed: function(element, className) {
+        if (!element || !className) {
+          return true;
+        }
+        return element.hasClass(className);
       }
     };
 

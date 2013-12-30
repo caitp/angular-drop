@@ -31,18 +31,37 @@ describe('$drop', function() {
     });
   });
 
-  describe('drop()', function() {
+  describe('Droppable#drop()', function() {
     it('should append dragged element', function() {
       var d0 = $compile('<div><div><div></div></div></div>')($rootScope),
           d1 = d0.children('div').eq(0),
           d2 = d1.children('div').eq(0),
           droppable = $drop.droppable(d1);
       $drag.draggable(element);
-
       droppable.drop(element);
 
       expect(d1.children().length).toEqual(2);
       expect(d1.children().eq(1).prop('id')).toEqual('draggable');
+    });
+  });
+
+  describe('dropAllowed()', function() {
+    it('should return true if element or class name is undefined', function() {
+      expect($drop.dropAllowed(undefined, 1)).toBeTruthy();
+      expect($drop.dropAllowed(angular.element('<div></div>'), undefined)).toBeTruthy();
+      expect($drop.dropAllowed(undefined, undefined)).toBeTruthy();
+    });
+
+    it ('should return true if the provided element contains the provided class', function() {
+      var element = angular.element('<div class="drop-allowed"></div>'),
+          className = 'drop-allowed';
+      expect($drop.dropAllowed(element, className)).toBeTruthy();
+    });
+
+    it ('should return false if the provided element does not contains the provided class', function() {
+      var element = angular.element('<div></div>'),
+          className = 'drop-allowed';
+      expect($drop.dropAllowed(element, className)).toBeFalsy();
     });
   });
 });
