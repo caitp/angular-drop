@@ -1,6 +1,5 @@
 angularDropFiles = {
   'angularDropSrc': [
-    'src/minerr.js',
     'src/utils.js',
     'src/draggable.js',
     'src/droppable.js',
