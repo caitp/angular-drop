@@ -15,19 +15,14 @@
  * classes provide multiple classes separated by  commas (allowed="class-one, class-two").
  *
  */
-var droppableOptions = {
-  'allowed': 'allowed'
-};
-var droppableDirective = ['$drop', '$interpolate', function($drop, $interpolate) {
+var droppableDirective = ['$drop', '$interpolate', function($drop, $interpolate, $parse) {
   return {
     restrict: 'A',
     link: function(scope, element, attrs) {
       var options = {};
-      angular.forEach(droppableOptions, function(name, attr) {
-        if (typeof attrs[attr] !== 'undefined') {
-          options[name] = unconst($interpolate(attrs[attr], false)(scope));
-        }
-      });
+      if (attrs.allowed) {
+        options.allowed = attrs.allowed.split(',');
+      }
       $drop.droppable(element, options);
     }
   };
@@ -191,7 +186,7 @@ var $dropProvider = function() {
         element = angular.element(element);
         $droppable = element.inheritedData('$droppable');
 
-        if (!$droppable || !this.dropAllowed($droppable.element, current.element)) {
+        if (!$droppable || !this.dropAllowed($droppable, current.element)) {
           // Element is not droppable...
           return badDrop();
         }
@@ -216,7 +211,7 @@ var $dropProvider = function() {
        * @name ui.drop.$drop#dropAllowed
        * @methodOf ui.drop.$drop
        *
-       * @param {droppable} An angular.element() object representing the droppable
+       * @param {droppable} The ui.drop.$drop.Droppable object
        * @param {draggable} An angular.element() object representing the draggable
        * @returns {boolean} whether or not the drop is allowed based
        *
@@ -226,15 +221,13 @@ var $dropProvider = function() {
        *
        */
       dropAllowed: function(droppable, draggable) {
-        var allowedClassAttr = droppable.attr('allowed');
-        if (!allowedClassAttr) {
+        if (!droppable.options || !droppable.options.allowed) {
           return true;
         }
-        var allowedClasses = allowedClassAttr.split(',');
         var dropAllowed = false;
-        for (var i = 0; i < allowedClasses.length; i++) {
-          var curClass = allowedClasses[i];
-          // remove spaces if preseent
+        for (var i = 0; i < droppable.options.allowed.length; i++) {
+          var curClass = droppable.options.allowed[i];
+          // remove spaces if present
           curClass = curClass.replace(/\s+/g, '');
           if (draggable.hasClass(curClass)) {
             dropAllowed = true;

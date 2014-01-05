@@ -49,20 +49,26 @@ describe('$drop', function() {
     it ('should return true if the provided draggable contains the class of provided droppable allowed attribute',
         function() {
       var draggable = angular.element('<div class="allow-me"></div>'),
-          droppable = angular.element('<div allowed="allow-you, allow-me, allow-another"></div>');
+          options = {
+            allowed: ['allow-you', 'allow-me', 'allow-another']
+          },
+          droppable = $drop.droppable(angular.element('<div ></div>'), options);
       expect($drop.dropAllowed(droppable, draggable)).toBeTruthy();
     });
 
     it ('should return false if the provided draggable does not contains the class of provided droppable allowed ' +
         'attribute', function() {
-      var draggable = angular.element('<div class="allow-me"></div>'),
-          droppable = angular.element('<div allowed="disallow-me"></div>');
+      var draggable = angular.element('<div class="allow-me"></div>')
+          options = {
+            allowed: 'disallow-me'
+          },
+          droppable = $drop.droppable(angular.element('<div></div>'), options);
       expect($drop.dropAllowed(droppable, draggable)).toBeFalsy();
     });
 
     it ('should return true if the provided droppable does not have an allowed attribute ', function() {
       var draggable = angular.element('<div class="allow-all"></div>'),
-          droppable = angular.element('<div></div>');
+          droppable = $drop.droppable(angular.element('<div></div>'));
       expect($drop.dropAllowed(droppable, draggable)).toBeTruthy();
     });
   });
