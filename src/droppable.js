@@ -11,9 +11,8 @@
  * Simple directive which denotes a 'droppable' widget (an area onto which adraggable may be dropped).
  *
  * @param {string=} allowed provides a class constraint for which all draggables must contain in order to be dropped
- * within this droppable.  If no allowed is provided, all draggables will be allowed.  Currently only 1 class can be
- * provided.
- * TODO: Allow for multiple classes and possibley attributes
+ * within this droppable.  If no allowed is provided, all draggables will be allowed.  To specify multiple allowed
+ * classes provide multiple classes separated by  commas (allowed="class-one, class-two").
  *
  */
 var droppableOptions = {
@@ -24,7 +23,7 @@ var droppableDirective = ['$drop', '$interpolate', function($drop, $interpolate)
     restrict: 'A',
     link: function(scope, element, attrs) {
       var options = {};
-      angular.forEach(draggableOptions, function(name, attr) {
+      angular.forEach(droppableOptions, function(name, attr) {
         if (typeof attrs[attr] !== 'undefined') {
           options[name] = unconst($interpolate(attrs[attr], false)(scope));
         }
@@ -223,15 +222,26 @@ var $dropProvider = function() {
        *
        * @description
        * Function to check if the provided draggable element has the class of the provided droppables 'allowed'
-       * attribute  Returns true if a match is found, or false otherwise.
+       * attribute.  Returns true if a match is found, or false otherwise.
        *
        */
       dropAllowed: function(droppable, draggable) {
-        var allowedClass = droppable.attr('allowed');
-        if (!allowedClass) {
+        var allowedClassAttr = droppable.attr('allowed');
+        if (!allowedClassAttr) {
           return true;
         }
-        return draggable.hasClass(allowedClass);
+        var allowedClasses = allowedClassAttr.split(',');
+        var dropAllowed = false;
+        for (var i = 0; i < allowedClasses.length; i++) {
+          var curClass = allowedClasses[i];
+          // remove spaces if preseent
+          curClass = curClass.replace(/\s+/g, '');
+          if (draggable.hasClass(curClass)) {
+            dropAllowed = true;
+            break;
+          }
+        }
+        return dropAllowed;
       }
     };
 

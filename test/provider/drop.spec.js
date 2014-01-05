@@ -49,7 +49,7 @@ describe('$drop', function() {
     it ('should return true if the provided draggable contains the class of provided droppable allowed attribute',
         function() {
       var draggable = angular.element('<div class="allow-me"></div>'),
-          droppable = angular.element('<div allowed="allow-me"></div>');
+          droppable = angular.element('<div allowed="allow-you, allow-me, allow-another"></div>');
       expect($drop.dropAllowed(droppable, draggable)).toBeTruthy();
     });
 
