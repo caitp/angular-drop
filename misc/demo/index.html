@@ -65,13 +65,13 @@
             <h2>Drag me <small>anywhere you want me to go</small></h2>
             <p>If dropped into one of these three areas, I will snap into place. Otherwise, I'll just hang around.</p>
           </div>
-          <h2 ng-if="!hasElement()" class="dropzone">[ Drop Zone ]</h2>
+          <h2 ng-if="!hasElement()" class="dropzone drop-constrain">[ Drop Zone ]</h2>
         </div>
         <div class="panel-body dropdemo drop-constrain" droppable ng-controller="DropCtrl">
-          <h2 ng-if="!hasElement()" class="dropzone">[ Drop Zone ]</h2>
+          <h2 ng-if="!hasElement()" class="dropzone drop-constrain">[ Drop Zone ]</h2>
         </div>
         <div class="panel-footer dropdemo drop-constrain" droppable ng-controller="DropCtrl">
-          <h2 ng-if="!hasElement()" class="dropzone">[ Drop Zone ]</h2>
+          <h2 ng-if="!hasElement()" class="dropzone drop-constrain">[ Drop Zone ]</h2>
         </div>
         <div class="panel-footer dropdemo" droppable ng-controller="DropCtrl">
           <h2 ng-if="!hasElement()" class="dropzone">[ Invalid Drop Zone ]</h2>
