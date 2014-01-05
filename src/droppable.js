@@ -9,15 +9,27 @@
  * @description
  *
  * Simple directive which denotes a 'droppable' widget (an area onto which adraggable may be dropped).
- * Currently, there are no parameters, and it is impossible to configure the directive's behaviour.
  *
- * TODO: Provide faculties for configuring the directive.
+ * @param {string=} allowed provides a class constraint for which all draggables must contain in order to be dropped
+ * within this droppable.  If no allowed is provided, all draggables will be allowed.  Currently only 1 class can be
+ * provided.
+ * TODO: Allow for multiple classes and possibley attributes
+ *
  */
-var droppableDirective = ['$drop', function($drop) {
+var droppableOptions = {
+  'allowed': 'allowed'
+};
+var droppableDirective = ['$drop', '$interpolate', function($drop, $interpolate) {
   return {
     restrict: 'A',
     link: function(scope, element, attrs) {
-      $drop.droppable(element);
+      var options = {};
+      angular.forEach(draggableOptions, function(name, attr) {
+        if (typeof attrs[attr] !== 'undefined') {
+          options[name] = unconst($interpolate(attrs[attr], false)(scope));
+        }
+      });
+      $drop.droppable(element, options);
     }
   };
 }];
@@ -180,7 +192,7 @@ var $dropProvider = function() {
         element = angular.element(element);
         $droppable = element.inheritedData('$droppable');
 
-        if (!$droppable || !this.dropAllowed(element, current.options.constrainTo)) {
+        if (!$droppable || !this.dropAllowed($droppable.element, current.element)) {
           // Element is not droppable...
           return badDrop();
         }
@@ -210,16 +222,16 @@ var $dropProvider = function() {
        * @returns {boolean} whether or not the drop is allowed based
        *
        * @description
-       * Function to check if the provided element contains the provided class.  Returns true if a match is found, or
-       * if either of the arguments are undefined.  False is returned if the element does not contain the provided
-       * class.
+       * Function to check if the provided draggable element has the class of the provided droppables 'allowed'
+       * attribute  Returns true if a match is found, or false otherwise.
        *
        */
-      dropAllowed: function(element, className) {
-        if (!element || !className) {
+      dropAllowed: function(droppable, draggable) {
+        var allowedClass = droppable.attr('allowed');
+        if (!allowedClass) {
           return true;
         }
-        return element.hasClass(className);
+        return draggable.hasClass(allowedClass);
       }
     };
 

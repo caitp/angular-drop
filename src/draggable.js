@@ -19,8 +19,7 @@
  */
 var draggableOptions = {
   'dragKeepSize': 'keepSize',
-  'dragWithin': 'dragWithin',
-  'constrainTo': 'constrainTo'
+  'dragWithin': 'dragWithin'
 };
 var draggableDirective = [
   '$drag', '$document', '$interpolate', '$timeout', function($drag, $document, $interpolate, $timeout) {
