@@ -15,7 +15,7 @@
  * classes provide multiple classes separated by  commas (allowed="class-one, class-two").
  *
  */
-var droppableDirective = ['$drop', '$interpolate', function($drop, $interpolate, $parse) {
+var droppableDirective = ['$drop', '$interpolate', function($drop) {
   return {
     restrict: 'A',
     link: function(scope, element, attrs) {
