@@ -217,8 +217,8 @@ var $dropProvider = function() {
        * @name ui.drop.$drop#dropAllowed
        * @methodOf ui.drop.$drop
        *
-       * @param {element} An angular.element() object
-       * @param {className} Class name as string.
+       * @param {droppable} An angular.element() object representing the droppable
+       * @param {draggable} An angular.element() object representing the draggable
        * @returns {boolean} whether or not the drop is allowed based
        *
        * @description

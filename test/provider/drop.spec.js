@@ -46,22 +46,24 @@ describe('$drop', function() {
   });
 
   describe('dropAllowed()', function() {
-    it('should return true if element or class name is undefined', function() {
-      expect($drop.dropAllowed(undefined, 1)).toBeTruthy();
-      expect($drop.dropAllowed(angular.element('<div></div>'), undefined)).toBeTruthy();
-      expect($drop.dropAllowed(undefined, undefined)).toBeTruthy();
+    it ('should return true if the provided draggable contains the class of provided droppable allowed attribute',
+        function() {
+      var draggable = angular.element('<div class="allow-me"></div>'),
+          droppable = angular.element('<div allowed="allow-me"></div>');
+      expect($drop.dropAllowed(droppable, draggable)).toBeTruthy();
     });
 
-    it ('should return true if the provided element contains the provided class', function() {
-      var element = angular.element('<div class="drop-allowed"></div>'),
-          className = 'drop-allowed';
-      expect($drop.dropAllowed(element, className)).toBeTruthy();
+    it ('should return false if the provided draggable does not contains the class of provided droppable allowed ' +
+        'attribute', function() {
+      var draggable = angular.element('<div class="allow-me"></div>'),
+          droppable = angular.element('<div allowed="disallow-me"></div>');
+      expect($drop.dropAllowed(droppable, draggable)).toBeFalsy();
     });
 
-    it ('should return false if the provided element does not contains the provided class', function() {
-      var element = angular.element('<div></div>'),
-          className = 'drop-allowed';
-      expect($drop.dropAllowed(element, className)).toBeFalsy();
+    it ('should return true if the provided droppable does not have an allowed attribute ', function() {
+      var draggable = angular.element('<div class="allow-all"></div>'),
+          droppable = angular.element('<div></div>');
+      expect($drop.dropAllowed(droppable, draggable)).toBeTruthy();
     });
   });
 });
