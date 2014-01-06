@@ -15,15 +15,19 @@
  * classes provide multiple classes separated by  commas (allowed="class-one, class-two").
  *
  */
-var droppableDirective = ['$drop', function($drop) {
+var droppableDirective = ['$drop', '$parse', function($drop, $parse) {
   return {
     restrict: 'A',
     link: function(scope, element, attrs) {
-      var options = {};
-      if (attrs.allowed) {
-        options.allowed = attrs.allowed.split(',');
+      var allowedGetter = $parse('allowed');
+      var allowedClasses = allowedGetter(attrs);
+      var droppable = $drop.droppable(element);
+      if (allowedClasses) {
+        if (typeof allowedClasses === 'string') {
+          allowedClasses = allowedClasses.split(',');
+        }
+        droppable.allowedClasses(allowedClasses);
       }
-      $drop.droppable(element, options);
     }
   };
 }];
@@ -221,12 +225,13 @@ var $dropProvider = function() {
        *
        */
       dropAllowed: function(droppable, draggable) {
-        if (!droppable.options || !droppable.options.allowed) {
+        var allowedClasses = droppable.allowedClasses();
+        if (!allowedClasses) {
           return true;
         }
         var dropAllowed = false;
-        for (var i = 0; i < droppable.options.allowed.length; i++) {
-          var curClass = droppable.options.allowed[i];
+        for (var i = 0; i < allowedClasses.length; i++) {
+          var curClass = allowedClasses[i];
           // remove spaces if present
           curClass = curClass.replace(/\s+/g, '');
           if (draggable.hasClass(curClass)) {
@@ -307,6 +312,27 @@ var $dropProvider = function() {
           $rootScope.$apply();
         }
         draggable.finish();
+      },
+
+      /**
+       * @ngdoc function
+       * @module ui.drop
+       * @name ui.drop.Droppable#allowedClasses
+       * @methodOf ui.drop.$drop.Droppable
+       * @function
+       *
+       * @param {allowedClasses} An array of strings representing classes of draggables which can be dropped within
+       * the draggable
+       * @returns {Array} Array of strings
+       *
+       * @description
+       * A Setter/Getter method for the array of allowed classes for this droppable.
+       */
+      allowedClasses: function(allowedClasses) {
+        if (allowedClasses) {
+          this.allowed = allowedClasses;
+        }
+        return this.allowed;
       }
     };
 
