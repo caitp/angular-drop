@@ -25,6 +25,8 @@ var droppableDirective = ['$drop', '$parse', function($drop, $parse) {
       if (allowedClasses) {
         if (typeof allowedClasses === 'string') {
           allowedClasses = allowedClasses.split(',');
+        } else {
+          allowedClasses = undefined;
         }
         droppable.allowedClasses(allowedClasses);
       }
