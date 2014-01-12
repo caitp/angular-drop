@@ -25,8 +25,8 @@ var droppableDirective = ['$drop', '$parse', function($drop, $parse) {
       if (allowedClasses) {
         if (typeof allowedClasses === 'string') {
           allowedClasses = allowedClasses.split(',');
-        } else {
-          allowedClasses = undefined;
+        } else if (angular.isArray(allowedClasses)) {
+          allowedClasses = allowedClasses;
         }
         droppable.allowedClasses(allowedClasses);
       }
@@ -228,17 +228,19 @@ var $dropProvider = function() {
        */
       dropAllowed: function(droppable, draggable) {
         var allowedClasses = droppable.allowedClasses();
-        if (!allowedClasses) {
+        if (!allowedClasses || !angular.isArray(allowedClasses)) {
           return true;
         }
         var dropAllowed = false;
         for (var i = 0; i < allowedClasses.length; i++) {
           var curClass = allowedClasses[i];
           // remove spaces if present
-          curClass = curClass.replace(/\s+/g, '');
-          if (draggable.hasClass(curClass)) {
-            dropAllowed = true;
-            break;
+          if (typeof curClass === 'string') {
+            curClass = curClass.replace(/\s+/g, '');
+            if (draggable.hasClass(curClass)) {
+              dropAllowed = true;
+              break;
+            }
           }
         }
         return dropAllowed;
