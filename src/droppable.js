@@ -20,10 +20,10 @@ var droppableDirective = ['$drop', '$parse', function($drop, $parse) {
     restrict: 'A',
     compile: function($element, $attrs) {
       return function(scope, element, attrs) {
-        var allowedClasses = $parse(attrs.dropAllowed || 'undefined')(scope);
+        var allowed = $parse(attrs.dropAllowed || 'undefined')(scope);
         var droppable = $drop.droppable(element);
-        if (allowedClasses) {
-          droppable.allowedClasses(allowedClasses);
+        if (allowed) {
+          droppable.allowedThings(allowed);
         }
       }
     }
@@ -223,21 +223,33 @@ var $dropProvider = function() {
        *
        */
       dropAllowed: function(droppable, draggable) {
-        var allowedClasses = droppable.allowedClasses();
-        if (!allowedClasses || !angular.isArray(allowedClasses)) {
+        var allowed = droppable.allowedThings();
+        if (!allowed || !angular.isArray(allowed)) {
           return true;
         }
 
-        for (var i = 0; i < allowedClasses.length; ++i) {
-          var curClass = allowedClasses[i];
-          // remove spaces if present
+        for (var i = 0; i < allowed.length; ++i) {
+          var curClass = allowed[i];
           if (typeof curClass === 'string') {
-            if (draggable.hasClass(curClass)) {
+            if (handleSelectors(curClass) || draggable.hasClass(curClass)) {
               return true;
             }
           }
         }
         return false;
+
+        function handleSelectors(selector) {
+          var selectorFunctions = ['matches', 'matchesSelector', 'is'];
+          var matchFound = false;
+          for (var i = 0; i < selectorFunctions.length; ++i) {
+            var func = selectorFunctions[i];
+            if (draggable[func] && draggable[func](selector)) {
+              matchFound = true;
+            }
+          }
+          return matchFound;
+        }
+
       }
     };
 
@@ -315,24 +327,24 @@ var $dropProvider = function() {
       /**
        * @ngdoc function
        * @module ui.drop
-       * @name ui.drop.Droppable#allowedClasses
+       * @name ui.drop.Droppable#allowedThings
        * @methodOf ui.drop.$drop.Droppable
        * @function
        *
-       * @param {allowedClasses} An array of strings representing classes of draggables which can be dropped within
-       * the draggable
+       * @param {allowedThings} An array of strings representing classes or selectors of draggables which can be
+       * dropped within the draggable
        * @returns {Array} Array of strings
        *
        * @description
-       * A Setter/Getter method for the array of allowed classes for this droppable.
+       * A Setter/Getter method for the array of allowed things for this droppable.
        */
-      allowedClasses: function(allowedClasses) {
+      allowedThings: function(allowedThings) {
         if (arguments.length > 0) {
-          if (typeof allowedClasses === 'string') {
-            allowedClasses = allowedClasses.split(',');
+          if (typeof allowedThings === 'string') {
+            allowedThings = allowedThings.split(',');
           }
-          if (angular.isArray(allowedClasses)) {
-            this.allowed = allowedClasses;
+          if (angular.isArray(allowedThings)) {
+            this.allowed = allowedThings;
           }
           return this;
         }
