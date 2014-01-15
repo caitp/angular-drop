@@ -63,6 +63,56 @@ readonly = function(target, name, fn) {
   }
 },
 
+matchesFn,
+CLASS_SELECTOR_REGEXP =
+  /^(\s*(\.-?([a-z\u00A0-\u10FFFF]|(\\\d+))([0-9a-z\u00A0-\u10FFFF_-]|(\\\d+))*)\s*)+$/;
+
+getMatchesFn = function() {
+  var selectorFunctions = ['matches', 'matchesSelector', 'msMatchesSelector', 'mozMatchesSelector',
+    'webkitMatchesSelector', 'oMatchesSelector'];
+
+  if (typeof window.Element === 'function' && typeof window.Element.prototype === 'object') {
+    for (var i=0, ii=selectorFunctions.length; i < ii; ++i) {
+      var name = selectorFunctions[i];
+      if (typeof window.Element.prototype[name] === 'function') {
+        var matches = window.Element.prototype[name];
+        return function(jq, selector) {
+          return matches.call(jq[0], selector);
+        }
+      }
+    }
+  }
+  if (typeof $ === 'function' && typeof $.prototype.is === 'function') {
+    return function(jq, selector) {
+      return jq.is(selector);
+    }    
+  } else if (typeof Sizzle === 'function' && typeof Sizzle.matchesSelector === 'function') {
+    return function(jq, selector) {
+      return Sizzle.matchesSelector(jq[0], selector);
+    }
+  } else {
+    // Default case: throw if any non-class selectors are used.
+    return function(jq, selector) {
+      if (selector && CLASS_SELECTOR_REGEXP.test(selector)) {
+        selector = selector.replace(/\s+/g, '').replace('.', ' ').replace(/^\s+/, '').replace(/\s+$/, '');
+        return jq.hasClass(selector);
+      } else {
+        throw new Error("Only class-based selectors are supported in this browser.");
+      }
+    }
+  }
+},
+
+matchesSelector = function(node, selector) {
+  var domEle;
+
+  if (typeof matchesFn !== 'function') {
+    matchesFn = getMatchesFn();
+  }
+
+  return matchesFn(node, selector);
+},
+
 DOM = {
   nodeEq: function(node, name) {
     return (typeof (node.nodeName === 'string' ?

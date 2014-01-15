@@ -10,9 +10,11 @@
  *
  * Simple directive which denotes a 'droppable' widget (an area onto which adraggable may be dropped).
  *
- * @param {string=} allowed provides a class constraint for which all draggables must contain in order to be dropped
- * within this droppable.  If no allowed is provided, all draggables will be allowed.  To specify multiple allowed
- * classes provide multiple classes separated by  commas (allowed="class-one, class-two").
+ * @param {string=} drop-allowed provides an array of element selector constraints for which all draggables must contain
+ * in order to be dropped within this droppable.  If no drop-allowed is provided, all draggables will be allowed.  To
+ * specify multiple selectors list them separated by commas (drop-allowed="div.class-one, div#id-two").  If jQuery is
+ * present $.fn.is is used otherwise Element.matches selector functions are used (vendor prefixed).  If Element.matches
+ * functionality is not present class checking is used (element.hasClass).
  *
  */
 var droppableDirective = ['$drop', '$parse', function($drop, $parse) {
@@ -20,10 +22,10 @@ var droppableDirective = ['$drop', '$parse', function($drop, $parse) {
     restrict: 'A',
     compile: function($element, $attrs) {
       return function(scope, element, attrs) {
-        var allowedClasses = $parse(attrs.dropAllowed || 'undefined')(scope);
+        var allowed = $parse(attrs.dropAllowed || 'undefined')(scope);
         var droppable = $drop.droppable(element);
-        if (allowedClasses) {
-          droppable.allowedClasses(allowedClasses);
+        if (allowed) {
+          droppable.allowedSelectors(allowed);
         }
       }
     }
@@ -223,16 +225,15 @@ var $dropProvider = function() {
        *
        */
       dropAllowed: function(droppable, draggable) {
-        var allowedClasses = droppable.allowedClasses();
-        if (!allowedClasses || !angular.isArray(allowedClasses)) {
+        var allowed = droppable.allowedSelectors();
+        if (!allowed || !angular.isArray(allowed)) {
           return true;
         }
 
-        for (var i = 0; i < allowedClasses.length; ++i) {
-          var curClass = allowedClasses[i];
-          // remove spaces if present
-          if (typeof curClass === 'string') {
-            if (draggable.hasClass(curClass)) {
+        for (var i = 0; i < allowed.length; ++i) {
+          var curAllowed = allowed[i];
+          if (typeof curAllowed === 'string') {
+            if (matchesSelector(draggable, curAllowed)) {
               return true;
             }
           }
@@ -315,24 +316,24 @@ var $dropProvider = function() {
       /**
        * @ngdoc function
        * @module ui.drop
-       * @name ui.drop.Droppable#allowedClasses
+       * @name ui.drop.Droppable#allowedSelectors
        * @methodOf ui.drop.$drop.Droppable
        * @function
        *
-       * @param {allowedClasses} An array of strings representing classes of draggables which can be dropped within
-       * the draggable
+       * @param {allowedSelectors} An array of strings representing selectors of draggables which can be
+       * dropped within the draggable
        * @returns {Array} Array of strings
        *
        * @description
-       * A Setter/Getter method for the array of allowed classes for this droppable.
+       * A Setter/Getter method for the array of allowed selectors for this droppable.
        */
-      allowedClasses: function(allowedClasses) {
+      allowedSelectors: function(allowedSelectors) {
         if (arguments.length > 0) {
-          if (typeof allowedClasses === 'string') {
-            allowedClasses = allowedClasses.split(',');
+          if (typeof allowedSelectors === 'string') {
+            allowedSelectors = allowedSelectors.split(',');
           }
-          if (angular.isArray(allowedClasses)) {
-            this.allowed = allowedClasses;
+          if (angular.isArray(allowedSelectors)) {
+            this.allowed = allowedSelectors;
           }
           return this;
         }

@@ -1,5 +1,17 @@
 describe('$drop', function() {
-  var element, $drag, $drop, $dnd, $compile, $rootScope;
+  var element, $drag, $drop, $dnd, $compile, $rootScope, hasMatchesSelector = false;
+  var selectorFunctions = ['matches', 'matchesSelector', 'msMatchesSelector', 'mozMatchesSelector',
+    'webkitMatchesSelector', 'oMatchesSelector'];
+
+  if (typeof window.Element === 'function' && typeof window.Element.prototype === 'object') {
+    for (var i=0, ii=selectorFunctions.length; i<ii; ++i) {
+      if (typeof window.Element.prototype[selectorFunctions[i]] === 'function') {
+        hasMatchesSelector = true;
+        break;
+      }
+    }
+  }
+  
   beforeEach(module('ui.drop'));
   beforeEach(inject(function(_$drag_, _$drop_, _$dnd_, _$compile_, _$rootScope_) {
     $drag = _$drag_;
@@ -46,26 +58,40 @@ describe('$drop', function() {
   });
 
   describe('dropAllowed()', function() {
-    it ('should return true if the provided draggable contains the class of provided droppable allowed attribute',
-        function() {
-      var draggable = angular.element('<div class="allow-me"></div>'),
+    if (window.jQuery || hasMatchesSelector) {
+      it ('should return true if the draggable matches the droppable allowed selectors',
+          function() {
+        var draggable = angular.element('<div id="allow-me"></div>'),
+            droppable = $drop.droppable(angular.element('<div ></div>'));
+        droppable.allowedSelectors(['allow-you', 'div#allow-me', 'allow-another']);
+        expect($drop.dropAllowed(droppable, draggable)).toBeTruthy();
+      });
+
+      it ('should return false if the draggable does not match the droppable allowed selectors', function() {
+        var draggable = angular.element('<div class="allow-me"></div>')
+            droppable = $drop.droppable(angular.element('<div></div>'));
+        droppable.allowedSelectors(['div.disallow-me']);
+        expect($drop.dropAllowed(droppable, draggable)).toBeFalsy();
+      });
+
+      it ('should return true if the droppable does not have any allowed selectors', function() {
+        var draggable = angular.element('<div class="allow-all"></div>'),
+            droppable = $drop.droppable(angular.element('<div></div>'));
+        expect($drop.dropAllowed(droppable, draggable)).toBeTruthy();
+      });
+    }
+    it ('should return true if the draggable matches the droppable class selector', function() {
+      var draggable = angular.element('<div class="allowed"></div>'),
           droppable = $drop.droppable(angular.element('<div ></div>'));
-      droppable.allowedClasses(['allow-you', 'allow-me', 'allow-another']);
+      droppable.allowedSelectors(['.allowed']);
       expect($drop.dropAllowed(droppable, draggable)).toBeTruthy();
     });
 
-    it ('should return false if the provided draggable does not contains the class of provided droppable allowed ' +
-        'attribute', function() {
-      var draggable = angular.element('<div class="allow-me"></div>')
-          droppable = $drop.droppable(angular.element('<div></div>'));
-      droppable.allowedClasses(['disallow-me']);
+    it ('should return true if the draggable does not match the droppable allowed class selectors', function() {
+      var draggable = angular.element('<div class="allowed2"></div>'),
+          droppable = $drop.droppable(angular.element('<div ></div>'));
+      droppable.allowedSelectors(['.allowed']);
       expect($drop.dropAllowed(droppable, draggable)).toBeFalsy();
-    });
-
-    it ('should return true if the provided droppable does not have an allowed attribute ', function() {
-      var draggable = angular.element('<div class="allow-all"></div>'),
-          droppable = $drop.droppable(angular.element('<div></div>'));
-      expect($drop.dropAllowed(droppable, draggable)).toBeTruthy();
     });
   });
 });
