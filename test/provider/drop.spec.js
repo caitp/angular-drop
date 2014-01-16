@@ -50,7 +50,7 @@ describe('$drop', function() {
         function() {
       var draggable = angular.element('<div class="allow-me"></div>'),
           droppable = $drop.droppable(angular.element('<div ></div>'));
-      droppable.allowedClasses(['allow-you', 'allow-me', 'allow-another']);
+      droppable.allowedThings(['allow-you', 'allow-me', 'allow-another']);
       expect($drop.dropAllowed(droppable, draggable)).toBeTruthy();
     });
 
@@ -58,7 +58,7 @@ describe('$drop', function() {
         'attribute', function() {
       var draggable = angular.element('<div class="allow-me"></div>')
           droppable = $drop.droppable(angular.element('<div></div>'));
-      droppable.allowedClasses(['disallow-me']);
+      droppable.allowedThings(['disallow-me']);
       expect($drop.dropAllowed(droppable, draggable)).toBeFalsy();
     });
 
