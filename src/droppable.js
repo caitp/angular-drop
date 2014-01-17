@@ -245,6 +245,7 @@ var $dropProvider = function() {
             var func = selectorFunctions[i];
             if (draggable[func] && draggable[func](selector)) {
               matchFound = true;
+              break;
             }
           }
           return matchFound;
