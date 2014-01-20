@@ -60,7 +60,8 @@
         <h3>Simple Drag &amp; Drop</h3>
       </div>
       <div class="panel panel-default">
-        <div class="panel-heading dropdemo" droppable drop-allowed="'the-dragger, div.the-dragger'" ng-controller="DropCtrl">
+        <div class="panel-heading dropdemo" droppable drop-allowed="'div.drag, div.the-dragger'"
+             ng-controller="DropCtrl">
           <div class="drag the-dragger" draggable drag-keep-size="true">
             <h2>Drag me <small class="hello">anywhere you want me to go</small></h2>
             <p>If dropped into one of these three areas, I will snap into place. Otherwise, I'll just hang around.</p>

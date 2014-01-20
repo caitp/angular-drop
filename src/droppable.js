@@ -53,7 +53,7 @@ var $dropProvider = function() {
    * a mechanism to drop-enable any arbitrary element, which allows it to be used in
    * custom directives, so that custom dragging behaviour can be achieved.
    */
-  this.$get = ['$document', '$rootScope', function($document, $rootScope) {
+  this.$get = ['$document', '$rootScope', '$window', function($document, $rootScope, $window) {
     var $drop = {
       /**
        * @ngdoc method
@@ -230,27 +230,62 @@ var $dropProvider = function() {
 
         for (var i = 0; i < allowed.length; ++i) {
           var curAllowed = allowed[i];
+          var matches = false;
           if (typeof curAllowed === 'string') {
-            if (handleSelectors(curAllowed) || draggable.hasClass(curAllowed)) {
-              return true;
-            }
-          }
-        }
-        return false;
-
-        function handleSelectors(selector) {
-          var selectorFunctions = ['matches', 'matchesSelector', 'is'];
-          var matchFound = false;
-          for (var i = 0; i < selectorFunctions.length; ++i) {
-            var func = selectorFunctions[i];
-            if (draggable[func] && draggable[func](selector)) {
-              matchFound = true;
+            if (this._handleSelectors(draggable, curAllowed)) {
+              matches = true;
               break;
             }
           }
-          return matchFound;
+        }
+        return matches;
+      },
+
+      /**
+       * @ngdoc method
+       * @module ui.drop
+       * @name ui.drop.$drop#_handleSelectors
+       * @methodOf ui.drop.$drop
+       *
+       * @param {draggable} An angular.element() object representing the draggable
+       * @returns {String} selector we are trying to match against the provided draggable
+       *
+       * @description
+       * Function to check if the provided draggable element contains the provided selector
+       *
+       */
+      _handleSelectors: function(draggable, selector) {
+        var selectorFunctions = ['matches', 'matchesSelector', 'msMatchesSelector', 'mozMatchesSelector',
+          'webkitMatchesSelector', 'oMatchesSelector'];
+        var selectorFound = false;
+        var matchFound = false;
+        var storedFunc;
+
+        // use $.fn.is if dealing with jQuery node, otherwise, use matches
+        if ($ && $.fn && $.fn.is && draggable.is) {
+          return draggable.is(selector);
+        } else {
+          // check for stored func and use it if found
+          storedFunc = $window.localStorage.getItem('_matches_selector_fn_');
+          if (storedFunc && storedFunc !== null) {
+            return draggable[storedFunc](selector);
+          } else {
+            for (var i = 0; i < selectorFunctions.length; ++i) {
+              var func = selectorFunctions[i];
+              selectorFound = draggable[func] !== undefined;
+              if (draggable[func] && draggable[func](selector)) {
+                matchFound = true;
+                $window.localStorage.setItem('_matches_selector_fn_', func);
+                break;
+              }
+            }
+          }
         }
 
+        if (!selectorFound) {
+          return draggable.hasClass(selector);
+        }
+        return matchFound;
       }
     };
 

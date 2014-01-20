@@ -50,7 +50,7 @@ describe('$drop', function() {
         function() {
       var draggable = angular.element('<div class="allow-me"></div>'),
           droppable = $drop.droppable(angular.element('<div ></div>'));
-      droppable.allowedSelectors(['allow-you', 'allow-me', 'allow-another']);
+      droppable.allowedSelectors(['allow-you', 'div.allow-me', 'allow-another']);
       expect($drop.dropAllowed(droppable, draggable)).toBeTruthy();
     });
 
