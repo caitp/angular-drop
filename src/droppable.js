@@ -23,7 +23,7 @@ var droppableDirective = ['$drop', '$parse', function($drop, $parse) {
         var allowed = $parse(attrs.dropAllowed || 'undefined')(scope);
         var droppable = $drop.droppable(element);
         if (allowed) {
-          droppable.allowedThings(allowed);
+          droppable.allowedSelectors(allowed);
         }
       }
     }
@@ -223,15 +223,15 @@ var $dropProvider = function() {
        *
        */
       dropAllowed: function(droppable, draggable) {
-        var allowed = droppable.allowedThings();
+        var allowed = droppable.allowedSelectors();
         if (!allowed || !angular.isArray(allowed)) {
           return true;
         }
 
         for (var i = 0; i < allowed.length; ++i) {
-          var curClass = allowed[i];
-          if (typeof curClass === 'string') {
-            if (handleSelectors(curClass) || draggable.hasClass(curClass)) {
+          var curAllowed = allowed[i];
+          if (typeof curAllowed === 'string') {
+            if (handleSelectors(curAllowed) || draggable.hasClass(curAllowed)) {
               return true;
             }
           }
@@ -328,7 +328,7 @@ var $dropProvider = function() {
       /**
        * @ngdoc function
        * @module ui.drop
-       * @name ui.drop.Droppable#allowedThings
+       * @name ui.drop.Droppable#allowedSelectors
        * @methodOf ui.drop.$drop.Droppable
        * @function
        *
@@ -339,13 +339,13 @@ var $dropProvider = function() {
        * @description
        * A Setter/Getter method for the array of allowed things for this droppable.
        */
-      allowedThings: function(allowedThings) {
+      allowedSelectors: function(allowedSelectors) {
         if (arguments.length > 0) {
-          if (typeof allowedThings === 'string') {
-            allowedThings = allowedThings.split(',');
+          if (typeof allowedSelectors === 'string') {
+            allowedSelectors = allowedSelectors.split(',');
           }
-          if (angular.isArray(allowedThings)) {
-            this.allowed = allowedThings;
+          if (angular.isArray(allowedSelectors)) {
+            this.allowed = allowedSelectors;
           }
           return this;
         }
