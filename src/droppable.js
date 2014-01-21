@@ -262,8 +262,8 @@ var $dropProvider = function() {
         var storedFunc;
 
         // use $.fn.is if dealing with jQuery node, otherwise, use matches
-        if ($ && $.fn && $.fn.is && draggable.is) {
-          return draggable.is(selector);
+        if (jqIs) {
+          return jqIs.call(draggable, selector);
         } else {
           // check for stored func and use it if found
           storedFunc = $window.localStorage.getItem('_matches_selector_fn_');

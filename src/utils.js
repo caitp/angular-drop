@@ -63,6 +63,8 @@ readonly = function(target, name, fn) {
   }
 },
 
+jqIs = $ && $.prototype.is,
+
 DOM = {
   nodeEq: function(node, name) {
     return (typeof (node.nodeName === 'string' ?
