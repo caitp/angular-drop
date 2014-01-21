@@ -53,7 +53,7 @@ var $dropProvider = function() {
    * a mechanism to drop-enable any arbitrary element, which allows it to be used in
    * custom directives, so that custom dragging behaviour can be achieved.
    */
-  this.$get = ['$document', '$rootScope', '$window', function($document, $rootScope, $window) {
+  this.$get = ['$document', '$rootScope', function($document, $rootScope) {
     var $drop = {
       /**
        * @ngdoc method
@@ -266,7 +266,7 @@ var $dropProvider = function() {
           return jqIs.call(draggable, selector);
         } else {
           // check for stored func and use it if found
-          storedFunc = $window.localStorage.getItem('_matches_selector_fn_');
+          storedFunc = $dropProvider['_matches_selector_fn_']
           if (storedFunc && storedFunc !== null) {
             return draggable[storedFunc](selector);
           } else {
@@ -275,7 +275,7 @@ var $dropProvider = function() {
               selectorFound = draggable[func] !== undefined;
               if (draggable[func] && draggable[func](selector)) {
                 matchFound = true;
-                $window.localStorage.setItem('_matches_selector_fn_', func);
+                $dropProvider['_matches_selector_fn_'] = func;
                 break;
               }
             }
