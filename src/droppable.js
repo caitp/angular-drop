@@ -10,9 +10,11 @@
  *
  * Simple directive which denotes a 'droppable' widget (an area onto which adraggable may be dropped).
  *
- * @param {string=} allowed provides a class constraint for which all draggables must contain in order to be dropped
- * within this droppable.  If no allowed is provided, all draggables will be allowed.  To specify multiple allowed
- * classes provide multiple classes separated by  commas (allowed="class-one, class-two").
+ * @param {string=} drop-allowed provides an array of element selector constraints for which all draggables must contain
+ * in order to be dropped within this droppable.  If no drop-allowed is provided, all draggables will be allowed.  To
+ * specify multiple selectors list them separated by commas (drop-allowed="div.class-one, div#id-two").  If jQuery is
+ * present $.fn.is is used otherwise Element.matches selector functions are used (vendor prefixed).  If Element.matches
+ * functionality is not present class checking is used (element.hasClass).
  *
  */
 var droppableDirective = ['$drop', '$parse', function($drop, $parse) {
@@ -260,20 +262,22 @@ var $dropProvider = function() {
         var selectorFound = false;
         var matchFound = false;
         var storedFunc;
+        var domEle;
 
         // use $.fn.is if dealing with jQuery node, otherwise, use matches
         if (jqIs) {
           return jqIs.call(draggable, selector);
         } else {
+          domEle = draggable[0];
           // check for stored func and use it if found
           storedFunc = $dropProvider['_matches_selector_fn_']
           if (storedFunc && storedFunc !== null) {
-            return draggable[storedFunc](selector);
+            return domEle[storedFunc](selector);
           } else {
             for (var i = 0; i < selectorFunctions.length; ++i) {
               var func = selectorFunctions[i];
-              selectorFound = draggable[func] !== undefined;
-              if (draggable[func] && draggable[func](selector)) {
+              selectorFound = domEle[func] !== undefined;
+              if (domEle[func] && domEle[func](selector)) {
                 matchFound = true;
                 $dropProvider['_matches_selector_fn_'] = func;
                 break;
