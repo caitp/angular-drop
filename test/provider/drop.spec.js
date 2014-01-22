@@ -80,6 +80,7 @@ describe('$drop', function() {
         expect($drop.dropAllowed(droppable, draggable)).toBeTruthy();
       });
     }
+
     it ('should return true if the draggable matches the droppable class selector', function() {
       var draggable = angular.element('<div class="allowed"></div>'),
           droppable = $drop.droppable(angular.element('<div ></div>'));
@@ -92,6 +93,13 @@ describe('$drop', function() {
           droppable = $drop.droppable(angular.element('<div ></div>'));
       droppable.allowedSelectors(['.allowed']);
       expect($drop.dropAllowed(droppable, draggable)).toBeFalsy();
+    });
+
+    it ('should return support class selectors with capital letters', function() {
+      var draggable = angular.element('<div class="alloweD"></div>'),
+          droppable = $drop.droppable(angular.element('<div ></div>'));
+      droppable.allowedSelectors(['.alloweD']);
+      expect($drop.dropAllowed(droppable, draggable)).toBeTruthy();
     });
   });
 });
