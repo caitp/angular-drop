@@ -232,15 +232,13 @@ var $dropProvider = function() {
 
         for (var i = 0; i < allowed.length; ++i) {
           var curAllowed = allowed[i];
-          var matches = false;
           if (typeof curAllowed === 'string') {
             if (this._handleSelectors(draggable, curAllowed)) {
-              matches = true;
-              break;
+              return true;
             }
           }
         }
-        return matches;
+        return false;
       },
 
       /**
@@ -259,9 +257,6 @@ var $dropProvider = function() {
       _handleSelectors: function(draggable, selector) {
         var selectorFunctions = ['matches', 'matchesSelector', 'msMatchesSelector', 'mozMatchesSelector',
           'webkitMatchesSelector', 'oMatchesSelector'];
-        var selectorFound = false;
-        var matchFound = false;
-        var storedFunc;
         var domEle;
 
         // use $.fn.is if dealing with jQuery node, otherwise, use matches
@@ -270,26 +265,21 @@ var $dropProvider = function() {
         } else {
           domEle = draggable[0];
           // check for stored func and use it if found
-          storedFunc = $dropProvider['_matches_selector_fn_']
-          if (storedFunc && storedFunc !== null) {
-            return domEle[storedFunc](selector);
+          if (this.storedSelectorFunc) {
+            return domEle[this.storedSelectorFunc](selector);
           } else {
             for (var i = 0; i < selectorFunctions.length; ++i) {
               var func = selectorFunctions[i];
-              selectorFound = domEle[func] !== undefined;
               if (domEle[func] && domEle[func](selector)) {
-                matchFound = true;
-                $dropProvider['_matches_selector_fn_'] = func;
-                break;
+                this.storedSelectorFunc = func;
+                return true;
               }
             }
           }
         }
 
-        if (!selectorFound) {
-          return draggable.hasClass(selector);
-        }
-        return matchFound;
+        return draggable.hasClass(selector);
+
       }
     };
 
@@ -371,12 +361,12 @@ var $dropProvider = function() {
        * @methodOf ui.drop.$drop.Droppable
        * @function
        *
-       * @param {allowedThings} An array of strings representing classes or selectors of draggables which can be
+       * @param {allowedSelectors} An array of strings representing selectors of draggables which can be
        * dropped within the draggable
        * @returns {Array} Array of strings
        *
        * @description
-       * A Setter/Getter method for the array of allowed things for this droppable.
+       * A Setter/Getter method for the array of allowed selectors for this droppable.
        */
       allowedSelectors: function(allowedSelectors) {
         if (arguments.length > 0) {
