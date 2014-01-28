@@ -1,0 +1,28 @@
+<h1><code ng:non-bindable="">draggable</code>
+<span class="hint">(directive in module <code ng:non-bindable="">ui.drop</code>
+)</span>
+</h1>
+<div><h2 id="Description">Description</h2>
+<div class="description"><p>Simple directive which denotes a 'draggable' widget. Currently, there are no parameters,
+and it is impossible to configure the directive's behaviour.</p></div>
+<h2 id="Usage">Usage</h2>
+<div class="usage">as attribute<pre class="prettyprint linenums">&lt;ANY draggable
+     [drag-keep-size="{boolean}"]
+     [drag-within="{string}"]&gt;
+   ...
+&lt;/ANY&gt;</pre>
+as class<pre class="prettyprint linenums">&lt;ANY class="draggable [drag-keep-size: {boolean};] [drag-within: {string};]"&gt;
+   ...
+&lt;/ANY&gt;</pre>
+<h3 id="Parameters">Parameters</h3>
+<ul class="parameters"><li><code ng:non-bindable="">drag-keep-size<i>(optional)</i> – {boolean=} – </code>
+<p>The dragged item should maintain its original size while dragging
+if set to true. Default: false.</p></li>
+<li><code ng:non-bindable="">drag-within<i>(optional)</i> – {string=} – </code>
+<p>Provides a constraint to limit the area through which an element may
+be dragged. It may be a tag name, or the special value '^' or 'parent' to refer to the parent
+element. If jQuery is in use, it may also be a selector supported by jQuery's 
+<a href="http://api.jquery.com/closest/">$.fn.closest</a>.</p></li>
+</ul>
+</div>
+</div>

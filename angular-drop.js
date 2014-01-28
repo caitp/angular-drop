@@ -1,7 +1,7 @@
 
 
 /**
- * @license AngularDrop v0.0.1-cc1df77
+ * @license AngularDrop v0.0.1-8cb839b
  * (c) 2013 Caitlin Potter & Contributors. http://caitp.github.io/angular-drop
  * License: MIT
  */
@@ -22,7 +22,7 @@
  * - `codeName` – `{string}` – Code name of the release, such as "jiggling-armfat".
  */
 var _version = {
-  full: '0.0.1-cc1df77',    // all of these placeholder strings will be replaced by grunt's
+  full: '0.0.1-8cb839b',    // all of these placeholder strings will be replaced by grunt's
   major: '0',    // package task
   minor: '0',
   dot: '1',
@@ -70,6 +70,56 @@ readonly = function(target, name, fn) {
   } else {
     target[name] = fn();
   }
+},
+
+matchesFn,
+CLASS_SELECTOR_REGEXP =
+  /^(\s*(\.-?([a-z\u00A0-\u10FFFF]|(\\\d+))([0-9a-z\u00A0-\u10FFFF_-]|(\\\d+))*)\s*)+$/i;
+
+getMatchesFn = function() {
+  var selectorFunctions = ['matches', 'matchesSelector', 'msMatchesSelector', 'mozMatchesSelector',
+    'webkitMatchesSelector', 'oMatchesSelector'];
+
+  if (typeof window.Element === 'function' && typeof window.Element.prototype === 'object') {
+    for (var i=0, ii=selectorFunctions.length; i < ii; ++i) {
+      var name = selectorFunctions[i];
+      if (typeof window.Element.prototype[name] === 'function') {
+        var matches = window.Element.prototype[name];
+        return function(jq, selector) {
+          return matches.call(jq[0], selector);
+        }
+      }
+    }
+  }
+  if (typeof $ === 'function' && typeof $.prototype.is === 'function') {
+    return function(jq, selector) {
+      return jq.is(selector);
+    }    
+  } else if (typeof Sizzle === 'function' && typeof Sizzle.matchesSelector === 'function') {
+    return function(jq, selector) {
+      return Sizzle.matchesSelector(jq[0], selector);
+    }
+  } else {
+    // Default case: throw if any non-class selectors are used.
+    return function(jq, selector) {
+      if (selector && CLASS_SELECTOR_REGEXP.test(selector)) {
+        selector = selector.replace(/\s+/g, '').replace('.', ' ').replace(/^\s+/, '').replace(/\s+$/, '');
+        return jq.hasClass(selector);
+      } else {
+        throw new Error("Only class-based selectors are supported in this browser.");
+      }
+    }
+  }
+},
+
+matchesSelector = function(node, selector) {
+  var domEle;
+
+  if (typeof matchesFn !== 'function') {
+    matchesFn = getMatchesFn();
+  }
+
+  return matchesFn(node, selector);
 },
 
 DOM = {
@@ -633,9 +683,11 @@ var $dragProvider = function() {
  *
  * Simple directive which denotes a 'droppable' widget (an area onto which adraggable may be dropped).
  *
- * @param {string=} allowed provides a class constraint for which all draggables must contain in order to be dropped
- * within this droppable.  If no allowed is provided, all draggables will be allowed.  To specify multiple allowed
- * classes provide multiple classes separated by  commas (allowed="class-one, class-two").
+ * @param {string=} drop-allowed provides an array of element selector constraints for which all draggables must contain
+ * in order to be dropped within this droppable.  If no drop-allowed is provided, all draggables will be allowed.  To
+ * specify multiple selectors list them separated by commas (drop-allowed="div.class-one, div#id-two").  If jQuery is
+ * present $.fn.is is used otherwise Element.matches selector functions are used (vendor prefixed).  If Element.matches
+ * functionality is not present class checking is used (element.hasClass).
  *
  */
 var droppableDirective = ['$drop', '$parse', function($drop, $parse) {
@@ -643,10 +695,10 @@ var droppableDirective = ['$drop', '$parse', function($drop, $parse) {
     restrict: 'A',
     compile: function($element, $attrs) {
       return function(scope, element, attrs) {
-        var allowedClasses = $parse(attrs.dropAllowed || 'undefined')(scope);
+        var allowed = $parse(attrs.dropAllowed || 'undefined')(scope);
         var droppable = $drop.droppable(element);
-        if (allowedClasses) {
-          droppable.allowedClasses(allowedClasses);
+        if (allowed) {
+          droppable.allowedSelectors(allowed);
         }
       }
     }
@@ -846,16 +898,15 @@ var $dropProvider = function() {
        *
        */
       dropAllowed: function(droppable, draggable) {
-        var allowedClasses = droppable.allowedClasses();
-        if (!allowedClasses || !angular.isArray(allowedClasses)) {
+        var allowed = droppable.allowedSelectors();
+        if (!allowed || !angular.isArray(allowed)) {
           return true;
         }
 
-        for (var i = 0; i < allowedClasses.length; ++i) {
-          var curClass = allowedClasses[i];
-          // remove spaces if present
-          if (typeof curClass === 'string') {
-            if (draggable.hasClass(curClass)) {
+        for (var i = 0; i < allowed.length; ++i) {
+          var curAllowed = allowed[i];
+          if (typeof curAllowed === 'string') {
+            if (matchesSelector(draggable, curAllowed)) {
               return true;
             }
           }
@@ -938,24 +989,24 @@ var $dropProvider = function() {
       /**
        * @ngdoc function
        * @module ui.drop
-       * @name ui.drop.Droppable#allowedClasses
+       * @name ui.drop.Droppable#allowedSelectors
        * @methodOf ui.drop.$drop.Droppable
        * @function
        *
-       * @param {allowedClasses} An array of strings representing classes of draggables which can be dropped within
-       * the draggable
+       * @param {allowedSelectors} An array of strings representing selectors of draggables which can be
+       * dropped within the draggable
        * @returns {Array} Array of strings
        *
        * @description
-       * A Setter/Getter method for the array of allowed classes for this droppable.
+       * A Setter/Getter method for the array of allowed selectors for this droppable.
        */
-      allowedClasses: function(allowedClasses) {
+      allowedSelectors: function(allowedSelectors) {
         if (arguments.length > 0) {
-          if (typeof allowedClasses === 'string') {
-            allowedClasses = allowedClasses.split(',');
+          if (typeof allowedSelectors === 'string') {
+            allowedSelectors = allowedSelectors.split(',');
           }
-          if (angular.isArray(allowedClasses)) {
-            this.allowed = allowedClasses;
+          if (angular.isArray(allowedSelectors)) {
+            this.allowed = allowedSelectors;
           }
           return this;
         }
