@@ -65,7 +65,7 @@ readonly = function(target, name, fn) {
 
 matchesFn,
 CLASS_SELECTOR_REGEXP =
-  /^(\s*(\.-?([a-z\u00A0-\u10FFFF]|(\\\d+))([0-9a-z\u00A0-\u10FFFF_-]|(\\\d+))*)\s*)+$/i;
+  /^(\s*(\.-?([a-z\u00A0-\u10FFFF]|(\\\d+))([0-9a-z\u00A0-\u10FFFF_-]|(\\\d+))*)\s*)+$/i,
 
 getMatchesFn = function() {
   var selectorFunctions = ['matches', 'matchesSelector', 'msMatchesSelector', 'mozMatchesSelector',
