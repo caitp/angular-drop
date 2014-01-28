@@ -1,7 +1,7 @@
 
 
 /**
- * @license AngularDrop v0.0.1-8cb839b
+ * @license AngularDrop v0.0.1-dd2ee81
  * (c) 2013 Caitlin Potter & Contributors. http://caitp.github.io/angular-drop
  * License: MIT
  */
@@ -22,7 +22,7 @@
  * - `codeName` – `{string}` – Code name of the release, such as "jiggling-armfat".
  */
 var _version = {
-  full: '0.0.1-8cb839b',    // all of these placeholder strings will be replaced by grunt's
+  full: '0.0.1-dd2ee81',    // all of these placeholder strings will be replaced by grunt's
   major: '0',    // package task
   minor: '0',
   dot: '1',
@@ -74,7 +74,7 @@ readonly = function(target, name, fn) {
 
 matchesFn,
 CLASS_SELECTOR_REGEXP =
-  /^(\s*(\.-?([a-z\u00A0-\u10FFFF]|(\\\d+))([0-9a-z\u00A0-\u10FFFF_-]|(\\\d+))*)\s*)+$/i;
+  /^(\s*(\.-?([a-z\u00A0-\u10FFFF]|(\\\d+))([0-9a-z\u00A0-\u10FFFF_-]|(\\\d+))*)\s*)+$/i,
 
 getMatchesFn = function() {
   var selectorFunctions = ['matches', 'matchesSelector', 'msMatchesSelector', 'mozMatchesSelector',
