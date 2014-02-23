@@ -6,7 +6,7 @@ module.exports = function(config, specificOptions) {
     logColors: true,
     browsers: ['Firefox', 'PhantomJS'],
     browserDisconnectTimeout: 5000,
-
+    reporters: ['dots'],
 
     // config for Travis CI
     sauceLabs: {
