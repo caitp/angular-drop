@@ -69,6 +69,17 @@ module.exports = function(config, specificOptions) {
     }
   });
 
+  function arrayRemove(array, item) {
+    var index = array.indexOf(item);
+    if (index >= 0) array.splice(index, 1);
+  }
+
+  if (process.argv.indexOf('--debug') >= 0) {
+    arrayRemove(config.reporters, 'coverage');
+    for (var key in config.preprocessors) {
+      arrayRemove(config.preprocessors[key], 'coverage');
+    }
+  }
 
   if (process.env.TRAVIS) {
     // TODO(vojta): remove once SauceLabs supports websockets.
