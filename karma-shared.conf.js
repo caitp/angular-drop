@@ -6,7 +6,23 @@ module.exports = function(config, specificOptions) {
     logColors: true,
     browsers: ['Firefox', 'PhantomJS'],
     browserDisconnectTimeout: 5000,
-    reporters: ['dots'],
+    reporters: ['dots', 'coverage'],
+    preprocessors: {
+      'src/*.js': ['coverage']
+    },
+
+    coverageReporter: {
+      reporters: [
+        {
+          type: 'lcov',
+          dir: 'coverage/'
+        },
+        {
+          type: 'text'
+        }
+      ]
+    },
+
 
     // config for Travis CI
     sauceLabs: {
