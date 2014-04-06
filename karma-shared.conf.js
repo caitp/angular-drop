@@ -85,6 +85,7 @@ module.exports = function(config, specificOptions) {
     // TODO(vojta): remove once SauceLabs supports websockets.
     // This speeds up the capturing a bit, as browsers don't even try to use websocket.
     config.transports = ['xhr-polling'];
+    config.reporters.push('coveralls');
 
     // Debug logging into a file, that we print out at the end of the build.
     config.loggers.push({
