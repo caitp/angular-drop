@@ -6,7 +6,23 @@ module.exports = function(config, specificOptions) {
     logColors: true,
     browsers: ['Firefox', 'PhantomJS'],
     browserDisconnectTimeout: 5000,
-    reporters: ['dots'],
+    reporters: ['dots', 'coverage'],
+    preprocessors: {
+      'src/*.js': ['coverage']
+    },
+
+    coverageReporter: {
+      reporters: [
+        {
+          type: 'lcov',
+          dir: 'coverage/'
+        },
+        {
+          type: 'text'
+        }
+      ]
+    },
+
 
     // config for Travis CI
     sauceLabs: {
@@ -53,11 +69,23 @@ module.exports = function(config, specificOptions) {
     }
   });
 
+  function arrayRemove(array, item) {
+    var index = array.indexOf(item);
+    if (index >= 0) array.splice(index, 1);
+  }
+
+  if (process.argv.indexOf('--debug') >= 0) {
+    arrayRemove(config.reporters, 'coverage');
+    for (var key in config.preprocessors) {
+      arrayRemove(config.preprocessors[key], 'coverage');
+    }
+  }
 
   if (process.env.TRAVIS) {
     // TODO(vojta): remove once SauceLabs supports websockets.
     // This speeds up the capturing a bit, as browsers don't even try to use websocket.
     config.transports = ['xhr-polling'];
+    config.reporters.push('coveralls');
 
     // Debug logging into a file, that we print out at the end of the build.
     config.loggers.push({

@@ -2,10 +2,15 @@ language: node_js
 node_js:
   - 0.10
 
+env:
+  global:
+    secure: "f2WvNMs20+RQ3u4ZmRgEspL4RGgYVtY3t23aW8j6LdSl9XauFusexNKHYV0juEN3TlIrQS681yZHLsTHeTSXXFwUNycn2ka/H+cuwMx1vf9L/VQq5i6moTaYOTJIBQLUzwnqciLHTaL+HjAGRmdUxz3VTrae9Ub4gezxYxJRbcE="
+
 before_script:
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start
   - npm install -g grunt-cli
+  - npm install karma-coveralls
   - grunt bower
 
 script:
