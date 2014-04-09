@@ -1,4 +1,4 @@
-##AngularDrop [![Build Status](https://travis-ci.org/caitp/angular-drop.svg?branch=master)](https://travis-ci.org/caitp/angular-drop) [![devDependency Status](https://david-dm.org/caitp/angular-drop/dev-status.png?branch=master)](https://david-dm.org/caitp/angular-drop#info=devDependencies) [![Coverage Status](https://coveralls.io/repos/caitp/angular-drop/badge.png?branch=master)](https://coveralls.io/r/caitp/angular-drop?branch=master)
+##AngularDrop [![Build Status](https://travis-ci.org/caitp/angular-drop.svg?branch=master)](https://travis-ci.org/caitp/angular-drop) [![devDependency Status](https://david-dm.org/caitp/angular-drop/dev-status.svg)](https://david-dm.org/caitp/angular-drop#info=devDependencies) [![Coverage Status](https://coveralls.io/repos/caitp/angular-drop/badge.png?branch=master)](https://coveralls.io/r/caitp/angular-drop?branch=master)
 
 ###Drag & Drop functionality in AngularJS, no jQuery required
 
