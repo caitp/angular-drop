@@ -22,7 +22,6 @@
     "grunt-contrib-jshint": "~0.10.0",
     "grunt-html2js": "~0.2.3",
     "grunt-karma": "~0.8.2",
-    "node-markdown": "~0.1.1",
     "grunt-ngmin": "0.0.3",
     "semver": "~2.2.1",
     "shelljs": "~0.2.6",
