@@ -37,6 +37,7 @@
     "karma-jasmine": "~0.1.5",
     "karma-firefox-launcher": "~0.1.3",
     "karma-phantomjs-launcher": "~0.1.1",
-    "karma-coverage": "^0.2.1"
+    "karma-coverage": "^0.2.1",
+    "grunt-bower-release": "0.0.5"
   }
 }
