@@ -18,6 +18,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-conventional-changelog');
   grunt.loadNpmTasks('grunt-ngdocs-caitp');
   grunt.loadNpmTasks('grunt-gh-pages');
+  grunt.loadNpmTasks('grunt-bower-release');
 
   var DROP_VERSION = util.getVersion();
   var dist = 'angular-drop-' + DROP_VERSION.full;
@@ -32,6 +33,26 @@ module.exports = function(grunt) {
     DROP_VERSION: DROP_VERSION,
 
     pkg: pkg,
+
+    bowerRelease: {
+      stable: {
+        options: {
+          endpoint: 'https://github.com/caitp/angular-drop-bower.git',
+          packageName: 'angular-drop',
+          stageDir: '.bower-release/',
+          main: 'angular-drop.min.js',
+          branchName: 'master',
+          dependencies: {}
+        },
+        files: [
+          {
+            expand: true,
+            cwd: 'build/',
+            src: ['angular-drop.js', 'angular-drop.min.js', 'angular-drop.min.js.map']
+          }
+        ]
+      }
+    },
 
     parallel: {
       travis: {
@@ -281,6 +302,8 @@ module.exports = function(grunt) {
     }
     grunt.task.mark().run('gh-pages');
   });
+
+  grunt.registerTask('release', 'Release on bower', ['build', 'bowerRelease']);
 
   return grunt;
 };
