@@ -20,6 +20,17 @@ With the best intentions, it is hoped that we will be able to deliver:
 
 This library is not simply a pair of directives, but is in fact also building blocks for creating custom directives with specialized Drag & Drop behaviour.
 
+###Installation
+
+Angular-drop is now registered on bower! You can install, as you'd expect, like so:
+
+```bash
+npm install angular-drop --save
+```
+
+If you prefer to get the package using more traditional means, the gh-pages branch contains everything you'd need. You can get at those [here](https://github.com/caitp/angular-drop/tree/gh-pages)
+
+
 ###Contributing
 
 I'd be grateful for any form of contribution, whether it be the creation of demo pages, bug reports, documentation, feature requests, or above all else, patches.
