@@ -25,7 +25,7 @@ This library is not simply a pair of directives, but is in fact also building bl
 Angular-drop is now registered on bower! You can install, as you'd expect, like so:
 
 ```bash
-npm install angular-drop --save
+bower install angular-drop --save
 ```
 
 If you prefer to get the package using more traditional means, the gh-pages branch contains everything you'd need. You can get at those [here](https://github.com/caitp/angular-drop/tree/gh-pages)
