@@ -16,6 +16,7 @@ install:
   - grunt bower
 
 before_script:
+  - scripts/travis/init_logs.sh
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start
 
