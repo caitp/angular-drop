@@ -60,7 +60,7 @@ var $dragProvider = function() {
    * a mechanism to drag-enable any arbitrary element, which allows it to be used in
    * custom directives, so that custom dragging behaviour can be achieved.
    */
-  this.$get = ['$document', '$drop', function($document, $drop) {
+  this.$get = ['$document', '$drop', '$dndPosition', function($document, $drop) {
     var $drag = {
       /**
        * @ngdoc method
@@ -215,6 +215,8 @@ var $dragProvider = function() {
         }
 
         self.offset = self.positionAbs = DOM.offset(self.element);
+
+        self.offset = $dndPosition.position(self.element);
 
         self.offset.scroll = false;
 
