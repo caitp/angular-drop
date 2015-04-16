@@ -47,6 +47,36 @@ var $dndDOMFactory = ['$document', '$window', function ($document, $window) {
         return offsetParent || docDomEl;
     };
 
+    function contains(a, b) {
+        var adown = a.nodeType === 9 ? a.documentElement : a,
+            bup = b && b.parentNode;
+        return a === bup || !!( bup && bup.nodeType === 1 && contains(adown, bup) );
+    };
+
+    function swapCss(element, css, callback, args) {
+        var ret, prop, old = {};
+        for (prop in css) {
+            old[prop] = element.style[prop];
+            element.style[prop] = css[prop];
+        }
+
+        ret = callback.apply(element, args || []);
+
+        for (prop in css) {
+            element.style[prop] = old[prop];
+        }
+
+        return ret;
+    };
+
+    var swapDisplay = /^(none|table(?!-c[ea]).+)/;
+
+    var cssShow = {
+        position: 'absolute',
+        visibility: 'hidden',
+        display: 'block'
+    };
+
     return {
         /**
          * Provides read-only equivalent of jQuery's position function:
@@ -76,6 +106,19 @@ var $dndDOMFactory = ['$document', '$window', function ($document, $window) {
          * http://api.jquery.com/offset/
          */
         offset: function (element) {
+
+            var doc = element[0] && element[0].ownerDocument;
+
+            if (!doc) {
+                return;
+            }
+
+            doc = doc.documentElement;
+
+            if (!contains(doc, element[0])) {
+                return { top: 0, left: 0 };
+            }
+
             var boundingClientRect = element[0].getBoundingClientRect();
             return {
                 width: boundingClientRect.width || element.prop('offsetWidth'),
@@ -83,6 +126,50 @@ var $dndDOMFactory = ['$document', '$window', function ($document, $window) {
                 top: boundingClientRect.top + ($window.pageYOffset || $document[0].documentElement.scrollTop),
                 left: boundingClientRect.left + ($window.pageXOffset || $document[0].documentElement.scrollLeft)
             };
+        },
+
+        /**
+         * Partial implementation of https://api.jquery.com/closest/
+         * @param node
+         * @param value
+         * @returns {angular.element}
+         */
+        closest: function(node, value) {
+            node = angular.element(node);
+            if ($.fn && angular.isFunction($.fn.closest)) {
+                return node.closest(value);
+            }
+            // Otherwise, assume it's a tag name...
+            node = node[0];
+            value = value.toLowerCase();
+            do {
+                if (node.nodeName.toLowerCase() === value) {
+                    return angular.element(node);
+                }
+            } while (node = node.parentNode);
+        },
+
+        size: function(node) {
+            var jq = angular.element(node);
+            node = node.nodeName ? node : node[0];
+            if (node.offsetWidth === 0 && swapDisplay.test(jq.css('display'))) {
+                return swapCss(node, cssShow, getHeightAndWidth, [node]);
+            }
+            return getHeightAndWidth(node);
+
+            function getHeightAndWidth(element) {
+                return {
+                    width: element.offsetWidth,
+                    height: element.offsetHeight
+                };
+            }
+        },
+
+        keepSize: function(node) {
+            var css = this.size(node);
+            css.width = css.width + 'px';
+            css.height = css.height + 'px';
+            return css;
         }
     };
 }];
