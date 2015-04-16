@@ -80,7 +80,7 @@ describe('$drag', function() {
       expect(parseInt(style.top, 10)).toEqual(99);
     });
 
-    it ('should offset draggable elements relative to their nearest positioned ancestor', function() {
+    it ('should offset element relative to its nearest positioned ancestor', function() {
 
       parent.css({position:'relative', top:'100px', left:'100px'});
       var draggable = $drag.draggable(element, {keepSize:true}),
@@ -90,7 +90,7 @@ describe('$drag', function() {
       expect(parseInt(style.top, 10)).toBe(0);
     });
 
-    it ('should offset draggable elements relative to their nearest positioned ancestor', function() {
+    it ('should offset element relative to its nearest positioned ancestor', function() {
 
       parent.css({position:'static', margin:'100px'});
       var draggable = $drag.draggable(element, {keepSize:true}),
