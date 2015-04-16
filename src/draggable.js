@@ -197,7 +197,7 @@ var $dragProvider = function() {
         currentDrag = self;
 
         self.cssDisplay = self.element.css('display');
-        self.dimensions = DOM.size(self.element);
+        self.dimensions = $dndDOM.size(self.element);
         if (!self.hanging) {
           self.cssPosition = self.element.css("position");
 
@@ -206,7 +206,7 @@ var $dragProvider = function() {
               width: self.element[0].style['width'],
               height: self.element[0].style['height']
             };
-            self.element.css(DOM.keepSize(self.element));
+            self.element.css($dndDOM.keepSize(self.element));
           }
         }
 
@@ -354,6 +354,32 @@ var $dragProvider = function() {
       }
     };
 
+    function dragConstraints(value, element) {
+      if (value.length === '') {
+        return;
+      }
+      if (/^(\.|#)/.test(value) && $.fn && angular.isFunction($.fn.closest)) {
+        // Find nearest element matching class
+        return constraintsFor(element.parent().closest(value));
+      }
+      if (/^(\^|parent)$/.test(value)) {
+        return constraintsFor(element.parent());
+      }
+      return constraintsFor($dndDOM.closest(element.parent(), value));
+    };
+
+    function constraintsFor(element) {
+      if (typeof element === 'undefined' || element.length === 0) {
+        return;
+      }
+      // Use offset + width/height for now?
+      var constraints = $dndDOM.offset(element),
+          dimensions = $dndDOM.size(element);
+      constraints.right = constraints.left + dimensions.width;
+      constraints.bottom = constraints.top + dimensions.height;
+      return constraints;
+    };
+
     /**
      * @ngdoc property
      * @module ui.drop
@@ -407,32 +433,6 @@ var $dragProvider = function() {
 
   function isDraggable(thing) {
     return angular.isObject(thing) && thing.constructor === Draggable;
-  }
-
-  function dragConstraints(value, element) {
-    if (value.length === '') {
-      return;
-    }
-    if (/^(\.|#)/.test(value) && $.fn && angular.isFunction($.fn.closest)) {
-      // Find nearest element matching class
-      return constraintsFor(element.parent().closest(value));
-    }
-    if (/^(\^|parent)$/.test(value)) {
-      return constraintsFor(element.parent());
-    }
-    return constraintsFor(DOM.closest(element.parent(), value));
-  }
-
-  function constraintsFor(element) {
-    if (typeof element === 'undefined' || element.length === 0) {
-      return;
-    }
-    // Use offset + width/height for now?
-    var constraints = DOM.offset(element),
-        dimensions = DOM.size(element);
-    constraints.right = constraints.left + dimensions.width;
-    constraints.bottom = constraints.top + dimensions.height;
-    return constraints;
   }
 
   function withinConstraints(c, x, y, w, h) {
