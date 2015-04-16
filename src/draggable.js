@@ -232,8 +232,8 @@ var $dragProvider = function() {
 
         self.element.css({
           position: 'absolute',
-          left: self.offset.left,
-          top: self.offset.top
+          left: self.offset.left + 'px',      //jqlite does not support raw Number
+          top: self.offset.top + 'px'
         });
 
         $document.on("mousemove", self.drag);
