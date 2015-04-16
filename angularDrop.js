@@ -1,9 +1,9 @@
 angularDropFiles = {
   'angularDropSrc': [
     'src/utils.js',
+    'src/position.js',
     'src/draggable.js',
     'src/droppable.js',
-    'src/position.js',
     'src/provider.js',
     'src/public.js'
   ],
