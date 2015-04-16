@@ -53,10 +53,10 @@ describe('draggable directive', function() {
   it ('should offset draggable elements relative to their nearest positioned ancestor', function() {
 
     element = $compile('<div style="position:absolute; top:100px; left:10px;"><div draggable></div></div>');
-    expect(false);
+    expect(false).toEqual(true);
 
     element = $compile('<div style="position:static"><div draggable></div></div>');
-    expect(false);
+    expect(false).toEqual(true);
 
   });
 });
