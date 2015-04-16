@@ -10,5 +10,7 @@ function publishExternalAPI() {
   }]).directive({
     draggable: draggableDirective,
     droppable: droppableDirective
+  }).factory({
+    $dndDOM: $dndDOMFactory
   });
 }
