@@ -3,21 +3,18 @@
 /**
  * @ngdoc object
  * @module ui.drop
- * @name ui.drop.$dndPosition
+ * @name ui.drop.$dndDOM
  * @requires $document
  * @requires $window
  *
  * @description
  *
- * A set of utility methods that can be use to retrieve position of DOM elements.
- * It is meant to be used where we need to absolute-position DOM elements in
- * relation to other, existing elements (this is the case for tooltips, popovers,
- * typeahead suggestions etc.).
+ * A set of utility methods that can be use to retrieve and manipulate DOM properties.
  *
- * (from https://github.com/angular-ui/bootstrap/blob/master/src/position/position.js)
+ * (based on https://github.com/angular-ui/bootstrap/blob/master/src/position/position.js)
  *
  */
-var $positionFactory = ['$document', '$window', function ($document, $window) {
+var $dndDOMFactory = ['$document', '$window', function ($document, $window) {
 
     function getStyle(el, cssprop) {
         if (el.currentStyle) { //IE
