@@ -49,6 +49,4 @@ describe('draggable directive', function() {
     element = $compile('<div draggable drag-within="{{dragWithin}}"></div>')($rootScope);
     expect($drag.draggable(element, false).options.dragWithin).toEqual('body');
   });
-
-
 });
