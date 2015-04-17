@@ -130,32 +130,32 @@ var $dndDOMFactory = ['$document', '$window', function ($document, $window) {
 
         /**
          * Partial implementation of https://api.jquery.com/closest/
-         * @param node
+         * @param element
          * @param value
          * @returns {angular.element}
          */
-        closest: function(node, value) {
-            node = angular.element(node);
+        closest: function(element, value) {
+            element = angular.element(element);
             if ($.fn && angular.isFunction($.fn.closest)) {
-                return node.closest(value);
+                return element.closest(value);
             }
             // Otherwise, assume it's a tag name...
-            node = node[0];
+            element = element[0];
             value = value.toLowerCase();
             do {
-                if (node.nodeName.toLowerCase() === value) {
-                    return angular.element(node);
+                if (element.nodeName.toLowerCase() === value) {
+                    return angular.element(element);
                 }
-            } while (node = node.parentNode);
+            } while (element = element.parentNode);
         },
 
-        size: function(node) {
-            var jq = angular.element(node);
-            node = node.nodeName ? node : node[0];
-            if (node.offsetWidth === 0 && swapDisplay.test(jq.css('display'))) {
-                return swapCss(node, cssShow, getHeightAndWidth, [node]);
+        size: function(element) {
+            var jq = angular.element(element);
+            element = element.nodeName ? element : element[0];
+            if (element.offsetWidth === 0 && swapDisplay.test(jq.css('display'))) {
+                return swapCss(element, cssShow, getHeightAndWidth, [element]);
             }
-            return getHeightAndWidth(node);
+            return getHeightAndWidth(element);
 
             function getHeightAndWidth(element) {
                 return {
@@ -165,8 +165,8 @@ var $dndDOMFactory = ['$document', '$window', function ($document, $window) {
             }
         },
 
-        keepSize: function(node) {
-            var css = this.size(node);
+        keepSize: function(element) {
+            var css = this.size(element);
             css.width = css.width + 'px';
             css.height = css.height + 'px';
             return css;
