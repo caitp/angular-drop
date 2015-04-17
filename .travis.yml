@@ -1,25 +1,19 @@
 language: node_js
 node_js:
-  - 0.10
-
+- 0.1
 env:
   global:
-    secure: "f2WvNMs20+RQ3u4ZmRgEspL4RGgYVtY3t23aW8j6LdSl9XauFusexNKHYV0juEN3TlIrQS681yZHLsTHeTSXXFwUNycn2ka/H+cuwMx1vf9L/VQq5i6moTaYOTJIBQLUzwnqciLHTaL+HjAGRmdUxz3VTrae9Ub4gezxYxJRbcE="
-
+    secure: PPm5YZ1XHLUnuUSbiqpaOw4LZd8r/cWtxAozKzyE9NVmIe229Otld1QzECrtSK58JnDOd7MinNuLswcl2MLWcgQJ2Bfh522psnzsotRYul8luymUtBO/a0BsvqryYXp3+dsZoV8grHbOVS3ezPcnrIXwIFATu3xuomBV0YuYntg=
 install:
-  # Disable the spinner, it looks bad on Travis
-  - npm config set spin false
-  - npm config set loglevel http
-  - npm install
-  - npm install -g grunt-cli
-  - npm install karma-coveralls
-  - grunt bower
-
+- npm config set spin false
+- npm config set loglevel http
+- npm install
+- npm install -g grunt-cli
+- npm install karma-coveralls
+- grunt bower
 before_script:
-  - scripts/travis/init_logs.sh
-  - export DISPLAY=:99.0
-  - sh -e /etc/init.d/xvfb start
-
+- scripts/travis/init_logs.sh
+- export DISPLAY=:99.0
+- sh -e /etc/init.d/xvfb start
 script:
-  - grunt test
-
+- grunt test
