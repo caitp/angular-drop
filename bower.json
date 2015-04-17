@@ -13,11 +13,12 @@
     "tests"
   ],
   "dependencies": {
-    "jquery": "~2.0.3",
+    "jquery": "~2.1.3",
     "google-code-prettify": "1.0.0",
     "closure-compiler": "https://closure-compiler.googlecode.com/files/compiler-20130603.zip",
     "ng-closure-runner": "https://raw.github.com/angular/ng-closure-runner/v0.2.2/assets/ng-closure-runner.zip",
-    "angular": "1.2.21",
-    "angular-mocks": "1.2.21"
+    "angular": "1.3.15",
+    "angular-mocks": "1.3.15",
+    "angular-drop": "~0.0.1"
   }
 }
