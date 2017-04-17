@@ -1,6 +1,6 @@
-##AngularDrop [![Build Status](https://travis-ci.org/caitp/angular-drop.svg?branch=master)](https://travis-ci.org/caitp/angular-drop) [![devDependency Status](https://david-dm.org/caitp/angular-drop/dev-status.svg)](https://david-dm.org/caitp/angular-drop#info=devDependencies) [![Coverage Status](http://img.shields.io/coveralls/caitp/angular-drop/master.svg)](https://coveralls.io/r/caitp/angular-drop?branch=master)
+## AngularDrop [![Build Status](https://travis-ci.org/caitp/angular-drop.svg?branch=master)](https://travis-ci.org/caitp/angular-drop) [![devDependency Status](https://david-dm.org/caitp/angular-drop/dev-status.svg)](https://david-dm.org/caitp/angular-drop#info=devDependencies) [![Coverage Status](http://img.shields.io/coveralls/caitp/angular-drop/master.svg)](https://coveralls.io/r/caitp/angular-drop?branch=master)
 
-###Drag & Drop functionality in AngularJS, no jQuery required
+### Drag & Drop functionality in AngularJS, no jQuery required
 
 [Demo](http://caitp.github.io/angular-drop) | [Docs](http://caitp.github.io/angular-drop/docs)
 
@@ -20,7 +20,7 @@ With the best intentions, it is hoped that we will be able to deliver:
 
 This library is not simply a pair of directives, but is in fact also building blocks for creating custom directives with specialized Drag & Drop behaviour.
 
-###Installation
+### Installation
 
 Angular-drop is now registered on bower! You can install, as you'd expect, like so:
 
@@ -31,7 +31,7 @@ bower install angular-drop --save
 If you prefer to get the package using more traditional means, the gh-pages branch contains everything you'd need. You can get at those [here](https://github.com/caitp/angular-drop/tree/gh-pages)
 
 
-###Contributing
+### Contributing
 
 I'd be grateful for any form of contribution, whether it be the creation of demo pages, bug reports, documentation, feature requests, or above all else, patches.
 
@@ -39,7 +39,7 @@ Patches should follow the [Google JavaScript Style Guide](https://google.github.
 
 While you may, if you so wish, discuss this module anywhere you like, I will be most likely to respond to inquiries directed to me on IRC (particularly in #angularjs on irc.freenode.net), or on the [issue tracker](https://github.com/caitp/angular-drop/issues).
 
-###License
+### License
 
 The MIT License (MIT)
 
